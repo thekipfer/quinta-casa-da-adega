@@ -141,7 +141,15 @@ export function SiteFooter({ locale }: { locale: Locale }) {
           <div className="desk:col-span-3">
             <div className="border border-white/15 bg-brand-deep/60 p-7 text-center desk:border-0 desk:bg-transparent desk:p-0 desk:text-left">
               <ColumnHeading className="justify-center desk:justify-start">{t.proposalHeading}</ColumnHeading>
-              <p className="mt-5 font-display text-[30px] leading-[1.1] text-white">{t.proposalTitle}</p>
+              <p className="mt-5 font-display text-[30px] leading-[1.1] text-white">
+                {/* One line per segment: "Apenas 15 casamentos" / "por ano." */}
+                {t.proposalTitle.split("\n").map((line, i) => (
+                  <span key={i} className="block">
+                    {i > 0 && " "}
+                    {line}
+                  </span>
+                ))}
+              </p>
               <p className="mt-3 font-serif text-[17px] leading-[1.55] text-white/75 italic">{t.proposalText}</p>
               <ProposalButton locale={locale} variant="cream" className="mt-6 w-full desk:w-auto">
                 {t.proposalButton}

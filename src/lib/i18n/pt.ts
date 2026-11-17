@@ -41,7 +41,7 @@ export const pt: Dictionary = {
       { label: "Contacto", href: routes.quote.pt },
     ],
     legal: [
-      { label: "Política de Privacidade", short: "Privacidade", href: "/politica-de-privacidade/" },
+      { label: "Política de Privacidade", short: "Privacidade", href: "/politica-de-privacidade" },
       { label: "Política de Cookies", short: "Cookies", href: "/politica-de-cookies/" },
       { label: "Livro de Reclamações", href: "https://www.livroreclamacoes.pt/Inicio/", external: true },
     ],
@@ -162,7 +162,7 @@ export const pt: Dictionary = {
     contacts: "Contactos",
     viewMap: "Ver no mapa",
     proposalHeading: "Pedido de proposta",
-    proposalTitle: "Apenas 15 casamentos por ano.",
+    proposalTitle: "Apenas 15 casamentos\npor ano.",
     proposalText: "Garantam já a vossa data — respondemos com uma proposta personalizada.",
     proposalButton: "Peça a sua proposta",
     legal: "Informação legal",

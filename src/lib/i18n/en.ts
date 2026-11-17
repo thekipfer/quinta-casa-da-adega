@@ -168,7 +168,7 @@ export const en: Dictionary = {
     contacts: "Contact",
     viewMap: "View on map",
     proposalHeading: "Request a proposal",
-    proposalTitle: "Only 15 weddings a year.",
+    proposalTitle: "Only 15 weddings\na year.",
     proposalText: "Secure your date today — we’ll reply with a bespoke proposal.",
     proposalButton: "Get my bespoke proposal",
     legal: "Legal information",
@@ -189,8 +189,8 @@ export const en: Dictionary = {
       {
         kind: "single",
         key: "year",
-        title: "When are you planning to say\n‘I do’?",
-        subtitle: "We host only 15 weddings a year\u00A0— dates book up early.",
+        title: "When are you planning\nto say ‘I do’?",
+        subtitle: "We host only 15 weddings a\u00A0year\u00A0— dates book up early.",
         options: ["2027", "2028", "2029", "Not decided yet"],
       },
       {

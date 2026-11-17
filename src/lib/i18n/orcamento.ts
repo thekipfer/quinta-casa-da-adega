@@ -102,9 +102,14 @@ const pt = {
       whatsapp:
         "Abrimos o WhatsApp com o vosso pedido já preenchido — basta carregar em enviar. Respondemos em 24–48 horas.",
       email:
-        "Abrimos o vosso email com o pedido já preenchido — basta carregar em enviar. Respondemos em 24–48 horas.",
+        "O vosso pedido está pronto a enviar — escolham onde o abrir e carreguem em enviar. Respondemos em 24–48 horas.",
       reopenWhatsapp: "Abrir WhatsApp novamente",
-      reopenEmail: "Abrir email novamente",
+      reopenEmail: "Abrir na app de email",
+      /** Fallbacks for visitors whose browser has no mail app behind mailto: links. */
+      emailElsewhere: "Ou enviem por",
+      copy: "Copiar mensagem",
+      copied: "Mensagem copiada",
+      copyHint: (email: string) => `Colem-na num email para ${email}.`,
       again: "Fazer outro pedido",
     },
     message: {
@@ -225,9 +230,13 @@ const en: OrcamentoContent = {
       title: "Thank you!",
       whatsapp:
         "We’ve opened WhatsApp with your request already filled in — just tap send. We’ll reply within 24–48 hours.",
-      email: "We’ve opened your email with your request already filled in — just hit send. We’ll reply within 24–48 hours.",
+      email: "Your request is ready to send — choose where to open it and hit send. We’ll reply within 24–48 hours.",
       reopenWhatsapp: "Open WhatsApp again",
-      reopenEmail: "Open email again",
+      reopenEmail: "Open in email app",
+      emailElsewhere: "Or send it with",
+      copy: "Copy message",
+      copied: "Message copied",
+      copyHint: (email) => `Paste it into an email to ${email}.`,
       again: "Make another request",
     },
     message: {

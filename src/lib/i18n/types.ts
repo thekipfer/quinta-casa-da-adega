@@ -77,6 +77,7 @@ export interface Dictionary {
     contacts: string;
     viewMap: string;
     proposalHeading: string;
+    /** A "\n" splits it into two lines. */
     proposalTitle: string;
     proposalText: string;
     proposalButton: string;

@@ -102,6 +102,18 @@ function TextInput({
   );
 }
 
+/** Compose links for the request email: the visitor's mail app (mailto) and the Gmail / Outlook web composers. */
+function emailLinks(subject: string, body: string) {
+  const to = encodeURIComponent(CONTACT_EMAIL);
+  const su = encodeURIComponent(subject);
+  const b = encodeURIComponent(body);
+  return {
+    mailto: `mailto:${CONTACT_EMAIL}?subject=${su}&body=${b}`,
+    gmail: `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${su}&body=${b}`,
+    outlook: `https://outlook.live.com/mail/0/deeplink/compose?to=${to}&subject=${su}&body=${b}`,
+  };
+}
+
 /** The integrated "pedido de proposta" form. Sends the request through the visitor's chosen channel. */
 export function OrcamentoForm({ locale }: { locale: Locale }) {
   const f = getOrcamento(locale).form;
@@ -115,6 +127,8 @@ export function OrcamentoForm({ locale }: { locale: Locale }) {
   const [message, setMessage] = useState("");
   const [showErrors, setShowErrors] = useState(false);
   const [sentHref, setSentHref] = useState<string | null>(null);
+  const [sentText, setSentText] = useState("");
+  const [copied, setCopied] = useState(false);
   const todayRaw = useSyncExternalStore(noop, readToday, readTodayOnServer);
   const today = todayRaw ? { y: Number(todayRaw.split("-")[0]), m: Number(todayRaw.split("-")[1]) } : null;
 
@@ -166,10 +180,13 @@ export function OrcamentoForm({ locale }: { locale: Locale }) {
       window.open(href, "_blank", "noopener,noreferrer");
       setSentHref(href);
     } else {
-      const href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(f.message.subject)}&body=${encodeURIComponent(text)}`;
+      const href = emailLinks(f.message.subject, text).mailto;
+      // Opens the visitor's mail app when one is registered; when none is, nothing happens, so the
+      // thank-you panel also offers Gmail, Outlook and copy-to-clipboard.
       window.location.assign(href);
       setSentHref(href);
     }
+    setSentText(text);
     // The thank-you panel is much shorter than the form; bring the card back into view so it's seen.
     requestAnimationFrame(() => document.getElementById("pedido")?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };
@@ -181,6 +198,18 @@ export function OrcamentoForm({ locale }: { locale: Locale }) {
     setMessage("");
     setShowErrors(false);
     setSentHref(null);
+    setSentText("");
+    setCopied(false);
+  };
+
+  const copyMessage = async () => {
+    const full = `${CONTACT_EMAIL}\n${f.message.subject}\n\n${sentText}`;
+    try {
+      await navigator.clipboard.writeText(full);
+      setCopied(true);
+    } catch {
+      // Clipboard blocked (e.g. insecure context): leave the button as is; the address is shown below it.
+    }
   };
 
   if (sentHref) {
@@ -201,6 +230,34 @@ export function OrcamentoForm({ locale }: { locale: Locale }) {
         >
           {contact === "whatsapp" ? f.success.reopenWhatsapp : f.success.reopenEmail}
         </a>
+        {contact === "email" && (
+          <div className="mt-6 flex flex-col items-center gap-3">
+            <p className="font-ui text-[11px] font-medium tracking-[0.2em] text-sand uppercase">{f.success.emailElsewhere}</p>
+            <div className="flex flex-wrap justify-center gap-2.5">
+              {(["gmail", "outlook"] as const).map((service) => (
+                <a
+                  key={service}
+                  href={emailLinks(f.message.subject, sentText)[service]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border border-hairline bg-white px-5 py-2.5 font-ui text-[14px] text-ink transition-colors hover:border-brand hover:text-brand"
+                >
+                  {service === "gmail" ? "Gmail" : "Outlook"}
+                </a>
+              ))}
+              <button
+                type="button"
+                onClick={copyMessage}
+                className="border border-hairline bg-white px-5 py-2.5 font-ui text-[14px] text-ink transition-colors hover:border-brand hover:text-brand"
+              >
+                {copied ? f.success.copied : f.success.copy}
+              </button>
+            </div>
+            <p className="font-serif text-[15px] text-body italic" aria-live="polite">
+              {copied ? f.success.copyHint(CONTACT_EMAIL) : CONTACT_EMAIL}
+            </p>
+          </div>
+        )}
         <button type="button" onClick={reset} className="qcda-textual mt-6 text-ink hover:text-brand">
           <span>{f.success.again}</span>
         </button>
