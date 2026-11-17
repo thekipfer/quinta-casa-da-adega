@@ -157,8 +157,8 @@ export function SiteHeader({ locale, current, alternates }: HeaderProps) {
           <Link href={t.homeHref} aria-label="Quinta Casa da Adega" className="pl-[5px]">
             <Image src="/images/logo-quinta.png" alt="Quinta Casa da Adega" width={85} height={60} priority className="h-[60px] w-[85px]" />
           </Link>
+          {/* Language switcher lives only in the fullscreen menu on mobile/tablet */}
           <div className="flex items-center">
-            <LanguageSwitcher locale={locale} alternates={alternates} className="mr-1" />
             <a
               href={WHATSAPP_SHORT_HREF}
               target="_blank"
