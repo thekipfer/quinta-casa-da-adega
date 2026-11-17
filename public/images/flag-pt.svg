@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="flag-pt" viewBox="0 0 512 512">
+  <!-- Portugal, 1:1 for circular display: green 2/5, red 3/5, simplified armillary sphere + shield -->
+  <path fill="#046A38" d="M0 0h208v512H0z"/>
+  <path fill="#DA291C" d="M208 0h304v512H208z"/>
+  <g fill="none" stroke="#FFE000" stroke-width="12">
+    <circle cx="208" cy="256" r="96"/>
+    <ellipse cx="208" cy="256" rx="96" ry="30"/>
+    <ellipse cx="208" cy="256" rx="96" ry="30" transform="rotate(32 208 256)"/>
+    <ellipse cx="208" cy="256" rx="96" ry="30" transform="rotate(-32 208 256)"/>
+  </g>
+  <path fill="#DA291C" stroke="#FFF" stroke-width="4" d="M154 188h108v74a54 54 0 0 1-108 0z"/>
+  <g fill="#FFE000">
+    <rect x="160" y="194" width="14" height="14"/>
+    <rect x="242" y="194" width="14" height="14"/>
+    <rect x="160" y="232" width="14" height="14"/>
+    <rect x="242" y="232" width="14" height="14"/>
+    <rect x="164" y="270" width="14" height="14"/>
+    <rect x="238" y="270" width="14" height="14"/>
+    <rect x="201" y="300" width="14" height="12"/>
+  </g>
+  <path fill="#FFF" d="M180 206h56v54a28 28 0 0 1-56 0z"/>
+  <g fill="#003399">
+    <rect x="202" y="212" width="12" height="15" rx="3"/>
+    <rect x="186" y="232" width="12" height="15" rx="3"/>
+    <rect x="202" y="232" width="12" height="15" rx="3"/>
+    <rect x="218" y="232" width="12" height="15" rx="3"/>
+    <rect x="202" y="252" width="12" height="15" rx="3"/>
+  </g>
+</svg>
