@@ -1,6 +1,8 @@
 import { Fragment } from "react";
 import { FilePenLine, Gem, Hand, Mail, MapPin, MonitorSmartphone, Phone, ShieldCheck, Trash2, Undo2, UserRound } from "lucide-react";
+import { EmailButton } from "@/components/EmailButton";
 import { SiteFooter } from "@/components/SiteFooter";
+import { JsonLd } from "@/components/JsonLd";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SplitText } from "@/components/SplitText";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
@@ -10,6 +12,7 @@ import { MAPS_HREF, PHONE_DISPLAY, PHONE_HREF } from "@/lib/content";
 import { CONTACT_EMAIL } from "@/lib/i18n/orcamento";
 import { PRIVACY_HREF, privacy, type PrivacyBlock, type PrivacyIcon } from "@/lib/i18n/privacidade";
 import { routes } from "@/lib/routes";
+import { breadcrumbSchema, graph } from "@/lib/schema";
 
 const icons: Record<PrivacyIcon, typeof Gem> = {
   user: UserRound,
@@ -74,6 +77,7 @@ export function PrivacyPage() {
 
   return (
     <div className="min-h-screen overflow-x-clip bg-white">
+      <JsonLd data={graph(breadcrumbSchema([{ name: p.breadcrumbHome, path: routes.home.pt }, { name: p.title }]))} />
       <SiteHeader locale="pt" current={PRIVACY_HREF} />
 
       <main>
@@ -174,10 +178,14 @@ export function PrivacyPage() {
                 {c.title}
               </h2>
               <p className="mt-4 font-serif text-[19px] leading-[1.6] text-body">{c.text}</p>
-              <a href={`mailto:${CONTACT_EMAIL}`} className="qcda-btn qcda-btn--filled mt-8 gap-3 hover:bg-brand-deep">
+              <EmailButton
+                email={CONTACT_EMAIL}
+                copiedLabel={c.copied}
+                className="qcda-btn qcda-btn--filled mt-8 gap-3 hover:bg-brand-deep"
+              >
                 <Mail className="size-[18px]" strokeWidth={1.5} />
                 {c.button}
-              </a>
+              </EmailButton>
             </div>
             <dl className="flex flex-col gap-6 font-serif text-[18px] text-body">
               <ContactRow label={c.addressLabel} Icon={MapPin}>

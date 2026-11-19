@@ -19,9 +19,9 @@ export function QuintaSection({ locale }: { locale: Locale }) {
 
       <div className="px-6 pt-[25px] pb-[136px] desk:px-0 desk:pt-[225px] desk:pb-0 desk:pl-[18%]">
         <div className="max-w-[547px]">
-          <h1 className="font-display text-[52px] leading-[37px] font-light text-white uppercase desk:text-[120px] desk:leading-[83px]">
+          <h2 className="font-display text-[52px] leading-[37px] font-light text-white uppercase desk:text-[120px] desk:leading-[83px]">
             <span className="desk:block">{quinta.titleLead}</span> {quinta.titleRest}
-          </h1>
+          </h2>
           <p className="mt-[25px] font-serif text-[22px] leading-[35px] text-white">{quinta.description}</p>
           <a href={quinta.cta.href} className="qcda-btn qcda-btn--outlined-light mt-[37px]">
             {quinta.cta.label}

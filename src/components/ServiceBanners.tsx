@@ -35,7 +35,7 @@ function ServiceCard({ service: s, index: i, discover }: { service: ServiceBanne
       <div className="qcda-svc__media">
         <Image
           src={s.image.src}
-          alt=""
+          alt={s.alt}
           width={s.image.width}
           height={s.image.height}
           sizes="(min-width: 1025px) 25vw, (min-width: 768px) 50vw, 100vw"

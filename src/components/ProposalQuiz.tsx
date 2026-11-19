@@ -7,6 +7,7 @@ import { X } from "lucide-react";
 import { QuizCalendar, formatLongDate } from "@/components/QuizCalendar";
 import { whatsappHref } from "@/lib/content";
 import { getDictionary, type Dictionary, type Locale } from "@/lib/i18n";
+import { sendProposalRequest } from "@/lib/proposal-request";
 import { cn } from "@/lib/utils";
 import type { QuizChoiceStep } from "@/types/content";
 
@@ -202,6 +203,21 @@ export function ProposalQuiz({ locale, open, onClose }: ProposalQuizProps) {
       setShowErrors(true);
       return;
     }
+    // Confirmation email to the couple + copy to the estate, in the background (never blocks the WhatsApp hand-off).
+    const honeypot = (e.currentTarget as HTMLFormElement).elements.namedItem("company") as HTMLInputElement | null;
+    sendProposalRequest({
+      form: "quiz",
+      locale,
+      name: answers.names,
+      email: answers.email,
+      phone: answers.phone,
+      message: answers.message,
+      year: answers.year,
+      date: answers.date,
+      guests: answers.guests,
+      services: answers.services,
+      company: honeypot?.value ?? "",
+    });
     window.open(buildWhatsAppUrl(answers, dict), "_blank", "noopener,noreferrer");
     setSubmitted(true);
   };
@@ -385,6 +401,8 @@ export function ProposalQuiz({ locale, open, onClose }: ProposalQuizProps) {
                 </>
               ) : (
                 <form name="pedido-proposta" autoComplete="on" onSubmit={submit} noValidate>
+                  {/* Honeypot for bots: hidden from people and assistive tech. */}
+                  <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" defaultValue="" />
                   {/* name + autocomplete on every field lets the browser offer saved contacts/history on focus */}
                   <StepHeading
                     id={titleId}

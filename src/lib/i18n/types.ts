@@ -1,5 +1,4 @@
 import type {
-  BlogPost,
   ImageAsset,
   LegalLink,
   NavItem,
@@ -44,7 +43,14 @@ export interface Dictionary {
     language: string;
   };
 
-  hero: { gallery: string; headline: string; lead: string; cta: string };
+  hero: {
+    gallery: string;
+    headline: string;
+    lead: string;
+    cta: string;
+    /** Alt text for each hero slide, in the order of `heroSlides` (content.ts). */
+    slideAlts: string[];
+  };
 
   testimonials: {
     intro: string;
@@ -66,7 +72,8 @@ export interface Dictionary {
     rightImage: ImageAsset & { alt: string };
   };
 
-  journal: { titleLines: string[]; readMore: string; posts: BlogPost[] };
+  /** Home "Casamentos na Quinta" section (the weddings themselves come from src/lib/weddings.ts). */
+  weddingsHome: { titleLines: string[]; viewWedding: string; viewAll: string };
 
   callToAction: { headline: string; button: string };
 

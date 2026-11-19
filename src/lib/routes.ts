@@ -11,6 +11,8 @@ export const routes = {
   services: { pt: "/servicos", en: "/en/services" },
   weddings: { pt: "/casamentos", en: "/en/weddings" },
   quote: { pt: "/orcamento", en: "/en/quote" },
+  /** Shown after the proposal form is sent (noindex; also the Google Ads conversion URL). */
+  thankYou: { pt: "/obrigado", en: "/en/thank-you" },
 } satisfies Record<string, Record<Locale, string>>;
 
 export type Section = keyof typeof routes;

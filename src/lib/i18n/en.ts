@@ -1,9 +1,9 @@
-import { blogImages, quintaImages, serviceImages } from "@/lib/content";
+import { quintaImages, serviceImages } from "@/lib/content";
 import type { Dictionary } from "@/lib/i18n/types";
 import { itemPaths, routes } from "@/lib/routes";
 
 /**
- * English (UK) copy. Hero, testimonials, services, venue, journal and CTA texts and the page
+ * English (UK) copy. Hero, testimonials, services, venue and CTA texts and the page
  * links come from the official quintacasadaadega.com/en/ page (with its typos fixed);
  * the footer, quiz and accessibility labels are translated from the Portuguese version.
  */
@@ -15,9 +15,9 @@ export const en: Dictionary = {
   homeHref: "/en",
 
   meta: {
-    title: "Wedding Venue near Lisbon | Quinta Casa da Adega",
+    title: "Wedding Venue near Lisbon, Portugal | Quinta Casa da Adega",
     description:
-      "Celebrate an exclusive and elegant wedding at Quinta Casa da Adega, surrounded by nature, just minutes from Lisbon. Your wedding venue near Lisbon.",
+      "Countryside wedding venue in Mafra, near Lisbon. Outdoor ceremonies, an elegant plan B and only 15 weddings a year — perfect for a destination wedding in Portugal.",
     ogImageAlt: "Wedding venue in Mafra - Quinta Casa da Adega",
   },
 
@@ -25,7 +25,6 @@ export const en: Dictionary = {
     left: [
       { label: "Home", href: routes.home.en, current: true },
       { label: "Our Venue", href: routes.about.en },
-      { label: "Services", href: routes.services.en },
     ],
     right: [
       { label: "Weddings", href: routes.weddings.en },
@@ -34,21 +33,19 @@ export const en: Dictionary = {
     mobile: [
       { label: "Home", href: routes.home.en, current: true },
       { label: "The Venue", href: routes.about.en },
-      { label: "Services", href: routes.services.en },
       { label: "Weddings", href: routes.weddings.en },
       { label: "Contact Us", href: routes.quote.en },
     ],
     footer: [
       { label: "Home", href: routes.home.en },
       { label: "Our Venue", href: routes.about.en },
-      { label: "Services", href: routes.services.en },
       { label: "Weddings", href: routes.weddings.en },
       { label: "Contact", href: routes.quote.en },
     ],
     legal: [
-      { label: "Privacy Policy", short: "Privacy", href: "/en/privacy-policy/" },
+      { label: "Privacy Policy", short: "Privacy", href: "/politica-de-privacidade" },
       // The cookie policy has no English version on the live site.
-      { label: "Cookie Policy", short: "Cookies", href: "/politica-de-cookies/" },
+      { label: "Cookie Policy", short: "Cookies", href: "/politica-de-cookies" },
       { label: "Complaints Book", href: "https://www.livroreclamacoes.pt/Inicio/", external: true },
     ],
   },
@@ -69,6 +66,11 @@ export const en: Dictionary = {
     headline: "Only 15 weddings a year",
     lead: "Charming, rustic, and exclusive, Quinta Casa da Adega turns your day into an unforgettable celebration.",
     cta: "Get my bespoke proposal",
+    slideAlts: [
+      "Wedding marquee with laid tables and lanterns beside the house at Quinta Casa da Adega",
+      "The marquee lit up at night over the wedding dinner table",
+      "Bride and groom walking past a long table laid in the estate’s flowering field",
+    ],
   },
 
   testimonials: {
@@ -110,10 +112,30 @@ export const en: Dictionary = {
   services: {
     discover: "Discover",
     items: [
-      { title: "The Venue", href: routes.about.en, image: serviceImages.quinta },
-      { title: "Catering", href: routes.services.en, image: serviceImages.catering },
-      { title: "Floral Design", href: itemPaths("services", "design-floral").en, image: serviceImages.floral },
-      { title: "Planning", href: routes.services.en, image: serviceImages.planning },
+      {
+        title: "Decoration",
+        href: itemPaths("services", "decoracao-de-mesas").en,
+        image: serviceImages.quinta,
+        alt: "Long wedding table laid on the estate lawn, overlooking the Mafra countryside",
+      },
+      {
+        title: "Catering",
+        href: itemPaths("services", "catering").en,
+        image: serviceImages.catering,
+        alt: "Plate of olives and cured meats served at a wedding at the estate",
+      },
+      {
+        title: "Floral Design",
+        href: itemPaths("services", "design-floral").en,
+        image: serviceImages.floral,
+        alt: "Table with red and orange flowers beneath a pergola of string lights",
+      },
+      {
+        title: "Planning",
+        href: itemPaths("services", "equipa-especializada").en,
+        image: serviceImages.planning,
+        alt: "Wedding dress hanging from a tree beside the round reception tables",
+      },
     ],
   },
 
@@ -124,36 +146,13 @@ export const en: Dictionary = {
       "An intimate and sophisticated venue, just one hour from Lisbon, with views of São Silvestre Church and an unforgettable sunset.",
     cta: { label: "Learn more", href: routes.about.en },
     leftImage: { ...quintaImages.left, alt: "Quinta Casa da Adega — wedding venue in Portugal" },
-    rightImage: { ...quintaImages.right, alt: "" },
+    rightImage: { ...quintaImages.right, alt: "Bride and groom on the stone staircase at Quinta Casa da Adega" },
   },
 
-  journal: {
-    titleLines: ["The Estate", "Journal"],
-    readMore: "Read More",
-    posts: [
-      {
-        title: "Wedding Decoration Styles",
-        href: "/en/types-of-wedding-decoration/",
-        image: blogImages.decoration,
-        date: "28 October, 2024",
-        dateHref: "/en/2024/10/",
-        category: "Wedding Inspiration & Style",
-        categoryHref: "/en/inspiracao-e-estilo-de-casamento/",
-        excerpt:
-          "On a sunny spring Saturday, Quinta Casa da Adega had the honour of hosting a truly enchanting wedding....",
-      },
-      {
-        title: "Rustic Wedding with a Touch of Elegance",
-        href: "/en/rustic-wedding-with-elegant-touch/",
-        image: blogImages.rustic,
-        date: "3 July, 2024",
-        dateHref: "/en/2024/07/",
-        category: "Real Weddings at the Estate",
-        categoryHref: "/en/casamentos-reais/",
-        excerpt:
-          "On a sunny spring Saturday, Quinta Casa da Adega had the honour of hosting a truly delightful wedding.",
-      },
-    ],
+  weddingsHome: {
+    titleLines: ["Weddings", "at the Estate"],
+    viewWedding: "View wedding",
+    viewAll: "See all weddings",
   },
 
   callToAction: {

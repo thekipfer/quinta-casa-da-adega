@@ -40,11 +40,6 @@ export const quintaImages = {
   right: { src: "/images/quinta-right.jpg", width: 1040, height: 1560 },
 } satisfies Record<string, ImageAsset>;
 
-export const blogImages = {
-  decoration: "/images/blog-decoracao.jpg",
-  rustic: "/images/blog-rustico.jpg",
-};
-
 export const ADDRESS_LINES = ["Rua das Forças Armadas, 34", "2665-118 Gradil, Mafra", "Portugal"];
 export const MAPS_HREF =
   "https://www.google.com/maps/search/?api=1&query=Quinta+Casa+da+Adega%2C+Rua+das+For%C3%A7as+Armadas+34%2C+2665-118+Gradil";

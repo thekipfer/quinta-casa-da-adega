@@ -9,7 +9,11 @@ import type { ImageAsset } from "@/types/content";
 
 type Photo = ImageAsset & { alt: string };
 
-/** Three-column photo grid; each photo opens a full-screen lightbox (arrows / swipe / Esc). */
+/**
+ * Masonry photo gallery (2 columns, 3 on tablet+): every photo keeps its own orientation and proportions — nothing is
+ * cropped — and is served as the original file (`unoptimized`), so it shows at full quality. Each photo opens a
+ * full-screen lightbox (arrows / swipe / Esc).
+ */
 export function WeddingGallery({ locale, photos, title }: { locale: Locale; photos: Photo[]; title: string }) {
   const ui = weddingsUi[locale];
   const [open, setOpen] = useState<number | null>(null);
@@ -46,10 +50,22 @@ export function WeddingGallery({ locale, photos, title }: { locale: Locale; phot
 
   const photo = open === null ? null : photos[open];
 
-  return (
-    <>
-      <ul className="grid grid-cols-2 gap-[10px] md:grid-cols-3">
-        {photos.map((p, i) => (
+  // Masonry: each photo, in order, goes to the currently shortest column (heights from the photos' own ratios).
+  const columns = (n: number) => {
+    const cols = Array.from({ length: n }, () => ({ height: 0, items: [] as number[] }));
+    photos.forEach((p, i) => {
+      const shortest = cols.reduce((a, b) => (b.height < a.height ? b : a));
+      shortest.items.push(i);
+      shortest.height += p.height / p.width;
+    });
+    return cols.map((c) => c.items);
+  };
+
+  const renderColumn = (items: number[], c: number) => (
+    <ul key={c} className="flex min-w-0 flex-1 flex-col gap-[10px]">
+      {items.map((i) => {
+        const p = photos[i];
+        return (
           <li key={p.src}>
             <button
               type="button"
@@ -65,13 +81,21 @@ export function WeddingGallery({ locale, photos, title }: { locale: Locale; phot
                 alt={p.alt}
                 width={p.width}
                 height={p.height}
-                sizes="(min-width: 1148px) 370px, (min-width: 768px) 33vw, 50vw"
-                className="block aspect-[2/3] h-auto w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                unoptimized
+                className="block h-auto w-full transition-transform duration-700 ease-out group-hover:scale-[1.04]"
               />
             </button>
           </li>
-        ))}
-      </ul>
+        );
+      })}
+    </ul>
+  );
+
+  return (
+    <>
+      {/* Two layouts so each column count gets its own balance; the hidden one is display:none, so its lazy images never load. */}
+      <div className="flex gap-[10px] md:hidden">{columns(2).map(renderColumn)}</div>
+      <div className="hidden gap-[10px] md:flex">{columns(3).map(renderColumn)}</div>
 
       {photo && (
         <div
@@ -89,7 +113,7 @@ export function WeddingGallery({ locale, photos, title }: { locale: Locale; phot
           }}
         >
           <div className="relative h-[85vh] w-[92vw]" onClick={(e) => e.stopPropagation()}>
-            <Image key={photo.src} src={photo.src} alt={photo.alt} fill sizes="92vw" className="object-contain" priority />
+            <Image key={photo.src} src={photo.src} alt={photo.alt} fill unoptimized className="object-contain" priority />
           </div>
 
           <p className="absolute top-5 left-6 font-ui text-[14px] tracking-[0.08em] text-white/80" aria-live="polite">

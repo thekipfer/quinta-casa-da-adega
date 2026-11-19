@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { FacebookIcon, PinterestIcon, WhatsAppIcon } from "@/components/icons";
 import { SiteFooter } from "@/components/SiteFooter";
+import { JsonLd } from "@/components/JsonLd";
 import { SiteHeader } from "@/components/SiteHeader";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 import { WeddingGallery } from "@/components/weddings/WeddingGallery";
@@ -9,6 +10,7 @@ import { Breadcrumbs, Container, WeddingCard } from "@/components/weddings/parts
 import { SITE_URL } from "@/lib/content";
 import type { Locale } from "@/lib/i18n/types";
 import { itemPaths, routes } from "@/lib/routes";
+import { breadcrumbSchema, graph, weddingGallerySchema } from "@/lib/schema";
 import { getAdjacentWeddings, getWeddings, weddingHref, weddingsUi, type Wedding } from "@/lib/weddings";
 
 function shareLinks(locale: Locale, w: Wedding) {
@@ -39,6 +41,22 @@ export function WeddingPage({ locale, wedding }: { locale: Locale; wedding: Wedd
 
   return (
     <div className="min-h-screen overflow-x-clip bg-white">
+      <JsonLd
+        data={graph(
+          weddingGallerySchema(locale, {
+            title: wedding.seoTitle,
+            description: wedding.description,
+            path: weddingHref(locale, wedding.slug),
+            date: wedding.date,
+            images: [wedding.cover, ...wedding.gallery],
+          }),
+          breadcrumbSchema([
+            { name: ui.home, path: routes.home[locale] },
+            { name: ui.title, path: listHref },
+            { name: wedding.title },
+          ]),
+        )}
+      />
       <SiteHeader locale={locale} current={listHref} alternates={itemPaths("weddings", wedding.slug)} />
 
       <main className="pt-[40px] pb-[80px] desk:pt-[70px] desk:pb-[120px]">

@@ -577,3 +577,25 @@
     animation: none;
   }
 }
+
+/* ---------- Cookie consent (src/components/consent) ---------- */
+.qcda-consent {
+  animation: qcda-consent-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both;
+}
+.qcda-consent-view {
+  animation: qcda-consent-view 0.4s ease-out both;
+}
+@keyframes qcda-consent-in {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes qcda-consent-view {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .qcda-consent,
+  .qcda-consent-view {
+    animation: none;
+  }
+}

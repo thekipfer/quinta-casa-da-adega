@@ -29,17 +29,8 @@ export interface ServiceBanner {
   title: string;
   href: string;
   image: ImageAsset;
-}
-
-export interface BlogPost {
-  title: string;
-  href: string;
-  image: string;
-  date: string;
-  dateHref: string;
-  category: string;
-  categoryHref: string;
-  excerpt: string;
+  /** Describes the photo (the title is already shown over it). */
+  alt: string;
 }
 
 export interface SocialLink {

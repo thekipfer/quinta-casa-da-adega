@@ -37,10 +37,12 @@ export function HeroSlider({ locale }: { locale: Locale }) {
         >
           <Image
             src={slide.src}
-            alt=""
+            alt={getDictionary(locale).hero.slideAlts[i] ?? ""}
             fill
             loading="eager"
-            fetchPriority={i === 0 ? "high" : "auto"}
+            // The first slide is the LCP element: preload it in <head>; later slides only fade in after it.
+            preload={i === 0}
+            fetchPriority={i === 0 ? "high" : "low"}
             sizes="100vw"
             className="object-cover"
           />

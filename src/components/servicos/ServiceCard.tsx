@@ -1,5 +1,5 @@
 import { RevealImage } from "@/components/about/RevealImage";
-import { serviceHref, servicesHref, servicesUi, type Service } from "@/lib/i18n/servicos";
+import { serviceHref, servicesUi, type Service } from "@/lib/i18n/servicos";
 import type { Locale } from "@/lib/i18n/types";
 
 /**
@@ -20,14 +20,11 @@ export function ServiceCard({ locale, service, delay = 0 }: { locale: Locale; se
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[rgb(24,14,1)]/60 via-[rgb(24,14,1)]/10 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-100"
       />
-      {/* Text layer sits above the card link (z-3 vs z-2) but lets clicks through, except on the category link. */}
+      {/* Text layer sits above the card link (z-3 vs z-2) and lets clicks through to it. */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[3] px-6 pb-6 desk:px-10 desk:pb-[35px]">
-        <a
-          href={servicesHref(locale)}
-          className="pointer-events-auto font-ui text-[12px] font-medium tracking-[0.2em] text-white/80 uppercase transition-colors hover:text-white"
-        >
+        <span className="font-ui text-[12px] font-medium tracking-[0.2em] text-white/80 uppercase">
           {servicesUi[locale].title}
-        </a>
+        </span>
         <h2 className="mt-2 font-display text-[28px] leading-[1] font-normal text-white uppercase desk:text-[32px]">
           {service.title}
         </h2>

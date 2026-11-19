@@ -4,6 +4,8 @@ import { MapPin, Phone } from "lucide-react";
 import type { ReactNode } from "react";
 import { FacebookIcon, InstagramIcon, WhatsAppIcon } from "@/components/icons";
 import { ProposalButton } from "@/components/ProposalButton";
+import { CookieSettingsButton } from "@/components/consent/CookieSettingsButton";
+import { getConsentCopy } from "@/lib/i18n/consent";
 import { ADDRESS_LINES, MAPS_HREF, PHONE_DISPLAY, PHONE_HREF, socialLinks, whatsappHref } from "@/lib/content";
 import { getDictionary, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -190,6 +192,15 @@ export function SiteFooter({ locale }: { locale: Locale }) {
                   </a>
                 </li>
               ))}
+              {/* Re-opens the cookie consent preferences (GDPR: withdrawing consent must be as easy as giving it) */}
+              <li className="flex items-center gap-x-2">
+                <span className="text-sand/70 desk:hidden" aria-hidden="true">
+                  ·
+                </span>
+                <CookieSettingsButton className="underline-offset-4 transition-colors duration-300 hover:text-white hover:underline desk:hover:no-underline">
+                  {getConsentCopy(locale).footerLink}
+                </CookieSettingsButton>
+              </li>
             </ul>
           </nav>
 

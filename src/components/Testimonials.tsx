@@ -244,9 +244,9 @@ export function Testimonials({ locale }: { locale: Locale }) {
   return (
     <section className="bg-sand pt-20 pb-[70px] desk:pt-[100px] desk:pb-[50px]">
       <div className="mx-auto max-w-[1100px] px-6 desk:px-0">
-        <h3 className="mx-auto max-w-[308px] text-center font-display text-[38px] leading-[38px] font-normal text-cream md:max-w-[770px]">
+        <h2 className="mx-auto max-w-[308px] text-center font-display text-[38px] leading-[38px] font-normal text-cream md:max-w-[770px]">
           {t.intro}
-        </h3>
+        </h2>
         <QuoteIcon className="mx-auto mt-[50px] block text-white" />
       </div>
 

@@ -57,6 +57,15 @@ export interface AboutContent {
     whatsapp: string;
     items: { title: string; text: string }[];
   };
+  /** Real questions couples ask, answered only with facts published on the site. Also emitted as FAQPage JSON-LD. */
+  faq: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    items: { question: string; answer: string }[];
+    more: string;
+    contact: string;
+  };
   availability: {
     title: string;
     text: string;
@@ -71,9 +80,9 @@ export interface AboutContent {
 
 const pt: AboutContent = {
   meta: {
-    title: "Quinta para Casamento em Mafra – Charmosa e Única",
+    title: "Quinta para Casamento em Mafra | Quinta Casa da Adega",
     description:
-      "Descubra a Quinta Casa da Adega: espaço rústico, intimista e exclusivo em Mafra. O cenário ideal para eternizar o vosso casamento.",
+      "Conheça a Quinta Casa da Adega, em Gradil, Mafra: um espaço rústico e intimista com vista para a Igreja de São Silvestre. Apenas um casamento por dia.",
   },
   hero: {
     title: "A Nossa História",
@@ -87,9 +96,9 @@ const pt: AboutContent = {
     "Em 2018, a Quinta foi adquirida pela nossa família, ainda sem receber eventos. Foi apenas em 2024 que decidimos concretizar o verdadeiro propósito deste lugar: dedicá-lo exclusivamente à celebração de casamentos, com disponibilidade limitada a partir de 2025.",
   ],
   storyImage: img(
-    "/images/sobre/ceremony-sunset.webp",
-    1536,
-    1024,
+    "/images/sobre/ceremony-editorial.webp",
+    1600,
+    854,
     "Quinta Casa da Adega – quinta para casamento elegante em Mafra, Portugal, com espaço exterior para cerimónia e receção",
   ),
   storyBottom: [
@@ -135,6 +144,55 @@ const pt: AboutContent = {
       },
     ],
   },
+  faq: {
+    eyebrow: "Dúvidas",
+    title: "Perguntas Frequentes",
+    description: "Respostas às dúvidas mais comuns dos noivos sobre casar na Quinta Casa da Adega.",
+    more: "Não encontram a resposta?",
+    contact: "Falem connosco no WhatsApp",
+    items: [
+      {
+        question: "Quantos casamentos realizam por ano?",
+        answer:
+          "Apenas 15 casamentos por ano, com um único casamento por dia. A quinta fica reservada para vós, com total privacidade.",
+      },
+      {
+        question: "Onde fica a Quinta Casa da Adega?",
+        answer:
+          "Na Rua das Forças Armadas, 34, em Gradil, no concelho de Mafra — perto de Lisboa, Sintra e Ericeira, num enquadramento natural com vista para a Igreja de São Silvestre.",
+      },
+      {
+        question: "A cerimónia pode ser ao ar livre?",
+        answer:
+          "Sim. A cerimónia pode decorrer ao ar livre, no jardim da quinta. Para qualquer condição meteorológica, existe um plano B elegante já preparado.",
+      },
+      {
+        question: "Podemos visitar a quinta antes de decidir?",
+        answer:
+          "Sim. As visitas são privadas e sem compromisso, para conhecerem a quinta com tranquilidade. Podem agendá-las através do pedido de proposta ou pelo WhatsApp.",
+      },
+      {
+        question: "Que serviços estão disponíveis para o casamento?",
+        answer:
+          "Decoração de mesas, design floral, catering e planeamento, com uma equipa especializada que acompanha cada detalhe, desde o primeiro contacto até ao dia do casamento.",
+      },
+      {
+        question: "Como pedimos um orçamento?",
+        answer:
+          "Preencham o pedido de proposta no site ou falem connosco pelo WhatsApp. Respondemos com uma proposta personalizada em 24 a 48 horas.",
+      },
+      {
+        question: "Recebem casais que vivem no estrangeiro?",
+        answer:
+          "Sim. Vários dos nossos casais planearam o casamento a partir do estrangeiro, com o acompanhamento da nossa equipa desde o primeiro contacto até ao grande dia.",
+      },
+      {
+        question: "Com quanta antecedência devemos reservar?",
+        answer:
+          "Como realizamos apenas 15 casamentos por ano, as datas mais procuradas são reservadas com antecedência — algumas datas de 2027 já estão reservadas. Recomendamos que nos contactem assim que tiverem uma data em mente.",
+      },
+    ],
+  },
   availability: {
     title: "Disponibilidade limitada",
     text: "Para garantir a excelência e dedicação que nos define, realizamos apenas 15 casamentos por ano.",
@@ -149,9 +207,9 @@ const pt: AboutContent = {
 
 const en: AboutContent = {
   meta: {
-    title: "Wedding Venue in Mafra – Charming and Unique",
+    title: "Wedding Venue in Mafra, near Lisbon | Quinta Casa da Adega",
     description:
-      "Discover Quinta Casa da Adega: a rustic, intimate and exclusive estate in Mafra. The perfect setting to make your wedding unforgettable.",
+      "Discover Quinta Casa da Adega in Gradil, Mafra: a rustic, intimate estate overlooking São Silvestre Church, hosting just one wedding a day near Lisbon.",
   },
   hero: {
     title: "Our Story",
@@ -165,9 +223,9 @@ const en: AboutContent = {
     "In 2018, the estate was acquired by our family, at a time when it was not yet hosting events. It was only in 2024 that we decided to fulfil the true purpose of this special place: dedicating it exclusively to wedding celebrations, with limited availability starting in 2025.",
   ],
   storyImage: img(
-    "/images/sobre/ceremony-sunset.webp",
-    1536,
-    1024,
+    "/images/sobre/ceremony-editorial.webp",
+    1600,
+    854,
     "Quinta Casa da Adega – elegant wedding venue in Mafra, Portugal, with an outdoor ceremony and reception space",
   ),
   storyBottom: [
@@ -210,6 +268,55 @@ const en: AboutContent = {
       {
         title: "Total exclusivity",
         text: "The estate is exclusively reserved for one wedding per day, ensuring complete privacy and a truly exclusive experience.",
+      },
+    ],
+  },
+  faq: {
+    eyebrow: "Questions",
+    title: "Frequently Asked Questions",
+    more: "Can’t find your answer?",
+    contact: "Message us on WhatsApp",
+    description: "Answers to the questions couples ask us most about getting married at Quinta Casa da Adega.",
+    items: [
+      {
+        question: "How many weddings do you host each year?",
+        answer:
+          "Only 15 weddings a year, with a single wedding per day. The estate is reserved for you alone, with complete privacy.",
+      },
+      {
+        question: "Where is Quinta Casa da Adega?",
+        answer:
+          "At Rua das Forças Armadas, 34, in Gradil, in the municipality of Mafra — near Lisbon, Sintra and Ericeira, in a natural setting overlooking São Silvestre Church.",
+      },
+      {
+        question: "Can the ceremony be outdoors?",
+        answer:
+          "Yes. The ceremony can take place outdoors in the estate’s garden, and an elegant plan B is ready for any weather.",
+      },
+      {
+        question: "Can we visit the estate before deciding?",
+        answer:
+          "Yes. Visits are private and come with no obligation, so you can get to know the estate at your own pace. Book one through the proposal request or on WhatsApp.",
+      },
+      {
+        question: "What services are available for the wedding?",
+        answer:
+          "Table decoration, floral design, catering and planning, with a specialist team looking after every detail from the first contact to the wedding day.",
+      },
+      {
+        question: "How do we request a quote?",
+        answer:
+          "Fill in the proposal request on the website or message us on WhatsApp. We reply with a bespoke proposal within 24 to 48 hours.",
+      },
+      {
+        question: "Do you welcome couples who live abroad?",
+        answer:
+          "Yes. Many of our couples planned their wedding from abroad, supported by our team from the first contact to the big day — ideal for a destination wedding in Portugal.",
+      },
+      {
+        question: "How far in advance should we book?",
+        answer:
+          "As we host only 15 weddings a year, the most sought-after dates are booked well in advance — some 2027 dates are already taken. We recommend getting in touch as soon as you have a date in mind.",
       },
     ],
   },

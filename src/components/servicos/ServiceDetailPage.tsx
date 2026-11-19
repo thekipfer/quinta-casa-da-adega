@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { FacebookIcon, PinterestIcon, XIcon } from "@/components/icons";
 import { RevealImage } from "@/components/about/RevealImage";
 import { SiteFooter } from "@/components/SiteFooter";
+import { JsonLd } from "@/components/JsonLd";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SplitText } from "@/components/SplitText";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
@@ -12,6 +13,7 @@ import { SITE_URL } from "@/lib/content";
 import { getServiceNeighbours, getServices, serviceHref, servicesUi, type Service } from "@/lib/i18n/servicos";
 import type { Locale } from "@/lib/i18n/types";
 import { itemPaths, routes } from "@/lib/routes";
+import { breadcrumbSchema, graph, serviceSchema } from "@/lib/schema";
 import { cn } from "@/lib/utils";
 
 /**
@@ -20,7 +22,6 @@ import { cn } from "@/lib/utils";
  */
 export function ServiceDetailPage({ locale, service }: { locale: Locale; service: Service }) {
   const ui = servicesUi[locale];
-  const listHref = routes.services[locale];
   const { previous, next } = getServiceNeighbours(locale, service.slug);
   const others = getServices(locale).filter((s) => s.slug !== service.slug);
   const url = `${SITE_URL}${serviceHref(locale, service.slug)}`;
@@ -42,12 +43,27 @@ export function ServiceDetailPage({ locale, service }: { locale: Locale; service
 
   return (
     <div className="min-h-screen overflow-x-clip bg-white">
-      <SiteHeader locale={locale} current={listHref} alternates={itemPaths("services", service.slug)} />
+      <JsonLd
+        data={graph(
+          serviceSchema(locale, {
+            name: service.seoTitle,
+            description: service.metaDescription,
+            path: serviceHref(locale, service.slug),
+            image: service.cover.src,
+            serviceType: service.serviceType,
+          }),
+          breadcrumbSchema([
+            { name: ui.home, path: routes.home[locale] },
+            { name: service.title },
+          ]),
+        )}
+      />
+      {/* No "Serviços" menu item any more: "" matches no item, so none (not even Home) is marked current. */}
+      <SiteHeader locale={locale} current="" alternates={itemPaths("services", service.slug)} />
       <main className="mx-auto w-full max-w-[1148px] px-6 pt-10 pb-[100px] desk:pt-[54px] desk:pb-[150px]">
         <Breadcrumbs
           items={[
             { label: ui.home, href: routes.home[locale] },
-            { label: ui.title, href: listHref },
             { label: service.title },
           ]}
         />
@@ -82,9 +98,7 @@ export function ServiceDetailPage({ locale, service }: { locale: Locale; service
 
           <RiseIn as="aside" delay={300}>
             <InfoBlock label={ui.category}>
-              <a href={listHref} className="transition-colors duration-300 hover:text-brand">
-                {ui.title}
-              </a>
+              {ui.title}
             </InfoBlock>
             <InfoBlock label={ui.date} className="mt-[30px]">
               {service.date}
@@ -120,14 +134,7 @@ export function ServiceDetailPage({ locale, service }: { locale: Locale; service
               </a>
             )}
           </div>
-          <a href={listHref} aria-label={ui.all} className="group grid grid-cols-2 gap-[3px] p-2 text-ink">
-            {Array.from({ length: 4 }, (_, i) => (
-              <span
-                key={i}
-                className="size-[10px] border border-current transition-colors duration-300 group-hover:border-brand group-hover:bg-brand"
-              />
-            ))}
-          </a>
+          <span aria-hidden="true" />
           <div className="flex justify-end">
             {next && (
               <a href={serviceHref(locale, next.slug)} className="group inline-flex items-center gap-4 font-ui text-[17px] leading-[35px] text-ink">

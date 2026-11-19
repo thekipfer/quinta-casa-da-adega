@@ -30,7 +30,7 @@ export const privacy = {
   meta: {
     title: "Política de Privacidade | Quinta Casa da Adega",
     description:
-      "Na Quinta Casa da Adega, valorizamos a confiança de quem visita o nosso site e utiliza os nossos serviços. A presente Política de Privacidade explica de que forma recolhemos, utilizamos e protegemos os seus dados pessoais.",
+      "Saiba como a Quinta Casa da Adega recolhe, utiliza e protege os seus dados pessoais, em conformidade com o RGPD, e como exercer os seus direitos.",
   },
   breadcrumbHome: "Início",
   eyebrow: "Informação legal",
@@ -148,6 +148,7 @@ export const privacy = {
     title: "Dúvidas sobre os seus dados?",
     text: "Fale connosco — teremos todo o gosto em ajudar.",
     button: "Enviar email",
+    copied: "Email copiado — cole-o no seu programa de email",
     addressLabel: "Morada",
     emailLabel: "Email",
     phoneLabel: "Telemóvel",

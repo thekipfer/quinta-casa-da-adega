@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, useSyncExternalStore, type FormEvent, type ReactNode } from "react";
 import { CalendarHeart, MessageSquareHeart, PenLine, UserRound, UsersRound } from "lucide-react";
 import { CheckIcon, EnvelopeIcon, GuestIcon, WhatsAppLineIcon } from "@/components/orcamento/FormIcons";
@@ -7,6 +8,8 @@ import { Reveal } from "@/components/orcamento/Reveal";
 import { whatsappHref } from "@/lib/content";
 import { CONTACT_EMAIL, getOrcamento, type ContactPreference, type GuestRange } from "@/lib/i18n/orcamento";
 import type { Locale } from "@/lib/i18n/types";
+import { submitProposalRequest } from "@/lib/proposal-request";
+import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
 const YEARS = [2026, 2027, 2028, 2029];
@@ -102,19 +105,10 @@ function TextInput({
   );
 }
 
-/** Compose links for the request email: the visitor's mail app (mailto) and the Gmail / Outlook web composers. */
-function emailLinks(subject: string, body: string) {
-  const to = encodeURIComponent(CONTACT_EMAIL);
-  const su = encodeURIComponent(subject);
-  const b = encodeURIComponent(body);
-  return {
-    mailto: `mailto:${CONTACT_EMAIL}?subject=${su}&body=${b}`,
-    gmail: `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${su}&body=${b}`,
-    outlook: `https://outlook.live.com/mail/0/deeplink/compose?to=${to}&subject=${su}&body=${b}`,
-  };
-}
-
-/** The integrated "pedido de proposta" form. Sends the request through the visitor's chosen channel. */
+/**
+ * The integrated "pedido de proposta" form. Sends the request to /api/pedido (confirmation email to the
+ * couple + copy to the estate), then opens the thank-you page. If sending fails, it offers WhatsApp / email.
+ */
 export function OrcamentoForm({ locale }: { locale: Locale }) {
   const f = getOrcamento(locale).form;
   const [year, setYear] = useState<string>("");
@@ -126,9 +120,8 @@ export function OrcamentoForm({ locale }: { locale: Locale }) {
   const [contact, setContact] = useState<ContactPreference>("whatsapp");
   const [message, setMessage] = useState("");
   const [showErrors, setShowErrors] = useState(false);
-  const [sentHref, setSentHref] = useState<string | null>(null);
-  const [sentText, setSentText] = useState("");
-  const [copied, setCopied] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "failed">("idle");
+  const router = useRouter();
   const todayRaw = useSyncExternalStore(noop, readToday, readTodayOnServer);
   const today = todayRaw ? { y: Number(todayRaw.split("-")[0]), m: Number(todayRaw.split("-")[1]) } : null;
 
@@ -166,107 +159,38 @@ export function OrcamentoForm({ locale }: { locale: Locale }) {
     return lines.join("\n");
   };
 
-  const submit = (e: FormEvent) => {
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (status === "sending") return;
     if (!valid) {
       setShowErrors(true);
       const first = document.querySelector<HTMLElement>("#formulario [aria-invalid='true'], #formulario [data-error='true']");
       first?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
-    const text = buildText();
-    if (contact === "whatsapp") {
-      const href = whatsappHref(text);
-      window.open(href, "_blank", "noopener,noreferrer");
-      setSentHref(href);
-    } else {
-      const href = emailLinks(f.message.subject, text).mailto;
-      // Opens the visitor's mail app when one is registered; when none is, nothing happens, so the
-      // thank-you panel also offers Gmail, Outlook and copy-to-clipboard.
-      window.location.assign(href);
-      setSentHref(href);
-    }
-    setSentText(text);
-    // The thank-you panel is much shorter than the form; bring the card back into view so it's seen.
-    requestAnimationFrame(() => document.getElementById("pedido")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    const honeypot = e.currentTarget.elements.namedItem("company") as HTMLInputElement | null;
+    setStatus("sending");
+    const ok = await submitProposalRequest({
+      form: "proposal",
+      locale,
+      name,
+      email,
+      phone,
+      message,
+      year,
+      month,
+      guests: guests as GuestRange,
+      contact,
+      company: honeypot?.value ?? "",
+    });
+    if (ok) router.push(routes.thankYou[locale]);
+    else setStatus("failed");
   };
-
-  const reset = () => {
-    setYear("");
-    setMonth(null);
-    setGuests("");
-    setMessage("");
-    setShowErrors(false);
-    setSentHref(null);
-    setSentText("");
-    setCopied(false);
-  };
-
-  const copyMessage = async () => {
-    const full = `${CONTACT_EMAIL}\n${f.message.subject}\n\n${sentText}`;
-    try {
-      await navigator.clipboard.writeText(full);
-      setCopied(true);
-    } catch {
-      // Clipboard blocked (e.g. insecure context): leave the button as is; the address is shown below it.
-    }
-  };
-
-  if (sentHref) {
-    return (
-      <div className="qcda-orc-success flex flex-col items-center px-2 py-10 text-center" aria-live="polite">
-        <span className="flex size-16 items-center justify-center rounded-full bg-brand text-white">
-          <CheckIcon className="qcda-orc-check size-8" />
-        </span>
-        <p className="mt-6 font-display text-[40px] leading-none text-ink">{f.success.title}</p>
-        <p className="mt-4 max-w-[400px] font-serif text-[18px] leading-[1.6] text-body italic">
-          {contact === "whatsapp" ? f.success.whatsapp : f.success.email}
-        </p>
-        <a
-          href={sentHref}
-          target={contact === "whatsapp" ? "_blank" : undefined}
-          rel="noopener noreferrer"
-          className="qcda-btn qcda-btn--filled mt-8 hover:bg-brand-deep"
-        >
-          {contact === "whatsapp" ? f.success.reopenWhatsapp : f.success.reopenEmail}
-        </a>
-        {contact === "email" && (
-          <div className="mt-6 flex flex-col items-center gap-3">
-            <p className="font-ui text-[11px] font-medium tracking-[0.2em] text-sand uppercase">{f.success.emailElsewhere}</p>
-            <div className="flex flex-wrap justify-center gap-2.5">
-              {(["gmail", "outlook"] as const).map((service) => (
-                <a
-                  key={service}
-                  href={emailLinks(f.message.subject, sentText)[service]}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="border border-hairline bg-white px-5 py-2.5 font-ui text-[14px] text-ink transition-colors hover:border-brand hover:text-brand"
-                >
-                  {service === "gmail" ? "Gmail" : "Outlook"}
-                </a>
-              ))}
-              <button
-                type="button"
-                onClick={copyMessage}
-                className="border border-hairline bg-white px-5 py-2.5 font-ui text-[14px] text-ink transition-colors hover:border-brand hover:text-brand"
-              >
-                {copied ? f.success.copied : f.success.copy}
-              </button>
-            </div>
-            <p className="font-serif text-[15px] text-body italic" aria-live="polite">
-              {copied ? f.success.copyHint(CONTACT_EMAIL) : CONTACT_EMAIL}
-            </p>
-          </div>
-        )}
-        <button type="button" onClick={reset} className="qcda-textual mt-6 text-ink hover:text-brand">
-          <span>{f.success.again}</span>
-        </button>
-      </div>
-    );
-  }
 
   return (
     <form onSubmit={submit} noValidate name="pedido-proposta" autoComplete="on" className="flex flex-col gap-9">
+      {/* Honeypot for bots: hidden from people and assistive tech. */}
+      <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" defaultValue="" />
       <Reveal delay={0}>
         <p className="font-ui text-[12px] font-medium tracking-[0.22em] text-sand uppercase">{f.eyebrow}</p>
         <h2 className="mt-2 font-display text-[36px] leading-[1.05] text-ink sm:text-[42px]">{f.title}</h2>
@@ -444,8 +368,34 @@ export function OrcamentoForm({ locale }: { locale: Locale }) {
             {f.errors.summary}
           </p>
         )}
-        <button type="submit" className="qcda-btn qcda-btn--filled qcda-orc-submit w-full py-4 text-[17px] hover:bg-brand-deep">
-          {f.submit}
+        {status === "failed" && (
+          <div role="alert" className="mb-5 border border-[#a1452f]/40 bg-white px-5 py-4 text-center">
+            <p className="font-serif text-[16px] leading-[1.5] text-[#a1452f] italic">{f.failure.text}</p>
+            <div className="mt-3 flex flex-wrap justify-center gap-x-6 gap-y-2">
+              <a
+                href={whatsappHref(buildText())}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="qcda-textual text-ink hover:text-brand"
+              >
+                <span>{f.failure.whatsapp}</span>
+              </a>
+              <a
+                href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(f.message.subject)}&body=${encodeURIComponent(buildText())}`}
+                className="qcda-textual text-ink hover:text-brand"
+              >
+                <span>{f.failure.email}</span>
+              </a>
+            </div>
+          </div>
+        )}
+        <button
+          type="submit"
+          disabled={status === "sending"}
+          aria-busy={status === "sending"}
+          className="qcda-btn qcda-btn--filled qcda-orc-submit w-full py-4 text-[17px] hover:bg-brand-deep disabled:cursor-wait disabled:opacity-80"
+        >
+          {status === "sending" ? f.submitting : f.submit}
         </button>
         <ul className="mt-4 flex flex-wrap justify-center gap-x-5 gap-y-1.5">
           {f.trust.map((item) => (

@@ -1,10 +1,12 @@
 import { SiteFooter } from "@/components/SiteFooter";
+import { JsonLd } from "@/components/JsonLd";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SplitText } from "@/components/SplitText";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 import { Breadcrumbs, Container, WeddingCard } from "@/components/weddings/parts";
 import type { Locale } from "@/lib/i18n/types";
-import { routes } from "@/lib/routes";
+import { itemPaths, routes } from "@/lib/routes";
+import { breadcrumbSchema, collectionSchema, graph } from "@/lib/schema";
 import { getWeddings, weddingsUi } from "@/lib/weddings";
 
 /** /casamentos (pt) and /en/weddings (en) — every real wedding as a two-column masonry grid, newest first. */
@@ -16,6 +18,17 @@ export function WeddingsPage({ locale }: { locale: Locale }) {
 
   return (
     <div className="min-h-screen overflow-x-clip bg-white">
+      <JsonLd
+        data={graph(
+          collectionSchema(
+            locale,
+            routes.weddings[locale],
+            ui.title,
+            weddings.map((w) => ({ name: w.title, path: itemPaths("weddings", w.slug)[locale] })),
+          ),
+          breadcrumbSchema([{ name: ui.home, path: routes.home[locale] }, { name: ui.title }]),
+        )}
+      />
       <SiteHeader locale={locale} current={routes.weddings[locale]} alternates={routes.weddings} />
 
       <main className="pt-[40px] pb-[80px] desk:pt-[70px] desk:pb-[120px]">
@@ -33,6 +46,7 @@ export function WeddingsPage({ locale }: { locale: Locale }) {
                 {column.map((wedding) => (
                   <WeddingCard
                     key={wedding.slug}
+                    preload={wedding.slug === weddings[0]?.slug}
                     locale={locale}
                     wedding={wedding}
                     sizes="(min-width: 1148px) 535px, (min-width: 768px) 50vw, 100vw"

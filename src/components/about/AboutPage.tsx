@@ -6,15 +6,18 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SplitText } from "@/components/SplitText";
 import { Testimonials } from "@/components/Testimonials";
+import { JsonLd } from "@/components/JsonLd";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 import { AboutAccordion } from "@/components/about/AboutAccordion";
 import { AboutSlider } from "@/components/about/AboutSlider";
+import { FaqAccordion } from "@/components/about/FaqAccordion";
 import { DividedColumns } from "@/components/about/DividedColumns";
 import { Pillars } from "@/components/about/Pillars";
 import { RevealImage } from "@/components/about/RevealImage";
 import { PHONE_DISPLAY, whatsappHref } from "@/lib/content";
 import { getDictionary, type Locale } from "@/lib/i18n";
 import { ABOUT_HREF, aboutSlides, getAboutContent, type FeatureIcon } from "@/lib/i18n/about";
+import { faqSchema, graph, venueSchema } from "@/lib/schema";
 
 function LatinCross({ className }: { className?: string }) {
   return (
@@ -43,6 +46,7 @@ export function AboutPage({ locale }: { locale: Locale }) {
 
   return (
     <div className="min-h-screen overflow-x-clip bg-white">
+      <JsonLd data={graph(venueSchema(locale), faqSchema(c.faq.items))} />
       <SiteHeader locale={locale} current={ABOUT_HREF[locale]} alternates={ABOUT_HREF} />
 
       <main>
@@ -139,6 +143,35 @@ export function AboutPage({ locale }: { locale: Locale }) {
               </a>
             </div>
             <AboutAccordion items={c.why.items} />
+          </Container>
+        </section>
+
+        {/* Perguntas frequentes — its own quiet, centred band on cream so it reads apart from "Porque nós?" (FAQPage JSON-LD above) */}
+        <section className="bg-cream py-[70px] desk:py-[110px]">
+          <Container>
+            <div className="mx-auto max-w-[832px]">
+              <div className="text-center">
+                <p className="font-ui text-[12px] font-medium tracking-[0.24em] text-sand-dark uppercase">{c.faq.eyebrow}</p>
+                <h2 className="mt-3 font-display text-[44px] leading-[1] font-normal tracking-[-0.03em] text-brand uppercase desk:text-[58px]">
+                  {c.faq.title}
+                </h2>
+                <p className="mx-auto mt-5 max-w-[520px] font-serif text-[18px] leading-[28px] text-body">{c.faq.description}</p>
+              </div>
+              <div className="mt-10 desk:mt-14">
+                <FaqAccordion items={c.faq.items} />
+              </div>
+              <p className="mt-10 text-center font-serif text-[18px] text-body">
+                {c.faq.more}{" "}
+                <a
+                  href={whatsappHref(t.whatsapp.contactMessage)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-brand underline decoration-sand underline-offset-[5px] transition-colors hover:text-brand-deep hover:decoration-brand"
+                >
+                  {c.faq.contact}
+                </a>
+              </p>
+            </div>
           </Container>
         </section>
 

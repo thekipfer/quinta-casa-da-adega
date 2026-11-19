@@ -43,6 +43,7 @@ export function WeddingCard({
   wedding,
   sizes,
   cropped = false,
+  preload = false,
   headingLevel: Heading = "h2",
 }: {
   locale: Locale;
@@ -50,6 +51,8 @@ export function WeddingCard({
   sizes: string;
   /** Crop every card to the same 4:3 frame (related list) instead of the photo's own proportions (masonry grid). */
   cropped?: boolean;
+  /** Above-the-fold card (the first one on the list page): preload its photo, it's the LCP element. */
+  preload?: boolean;
   headingLevel?: "h2" | "h3";
 }) {
   const { cover } = wedding;
@@ -61,6 +64,7 @@ export function WeddingCard({
         width={cover.width}
         height={cover.height}
         sizes={sizes}
+        preload={preload}
         className={cn(
           "block h-auto w-full transition-transform duration-[900ms] ease-out group-hover:scale-[1.05]",
           cropped && "aspect-[4/3] object-cover",

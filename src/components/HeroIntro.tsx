@@ -9,8 +9,9 @@ export function HeroIntro({ locale }: { locale: Locale }) {
   return (
     <section className="relative z-[2] mt-[23px] px-5 text-center desk:-mt-[110px]">
       <div className="mx-auto max-w-[650px]">
+        {/* The page's main heading: the first thing visitors read ("Apenas 15 casamentos por ano"). */}
         <SplitText
-          as="p"
+          as="h1"
           text={t.headline}
           className="-mt-[60px] mb-5 font-display text-[50px] leading-[40px] font-normal text-white uppercase drop-shadow-[0_1px_6px_rgba(0,0,0,0.15)] desk:mt-0 desk:text-[90px] desk:leading-[70px]"
         />

@@ -1,16 +1,16 @@
 /**
- * Services list (/servicos · /en/services) and service detail pages (/servicos/<slug> · /en/services/<slug>).
+ * Service detail pages (/servicos/<slug> · /en/services/<slug>). There is no list page: the services are
+ * linked from the home page banners and from each other.
  * Portuguese copy, dates, galleries and prev/next order come from the live site
  * (quintacasadaadega.com/categoria/servicos/ and /servico/casamento/<slug>/); English is translated from it.
  * The slug is shared by both languages.
  */
 import type { Metadata } from "next";
 import type { Locale } from "@/lib/i18n/types";
-import { itemPaths, routes } from "@/lib/routes";
+import { itemPaths } from "@/lib/routes";
 import { localizedMetadata } from "@/lib/seo";
 import type { ImageAsset } from "@/types/content";
 
-export const servicesHref = (locale: Locale) => routes.services[locale];
 export const serviceHref = (locale: Locale, slug: string) => itemPaths("services", slug)[locale];
 
 export type ServiceImage = ImageAsset & { alt: string };
@@ -19,6 +19,10 @@ export type ServiceImage = ImageAsset & { alt: string };
 export interface Service {
   slug: string;
   title: string;
+  /** Search-result title (before " | Quinta Casa da Adega"): names the wedding service explicitly. */
+  seoTitle: string;
+  /** schema.org serviceType. */
+  serviceType: string;
   /** Short summary for <meta name="description">. */
   metaDescription: string;
   description: string;
@@ -28,8 +32,8 @@ export interface Service {
   gallery: ServiceImage[];
 }
 
-type Copy = Pick<Service, "title" | "metaDescription" | "description" | "date">;
-type Photo = { name: string; height?: number; alt: Record<Locale, string> };
+type Copy = Pick<Service, "title" | "seoTitle" | "serviceType" | "metaDescription" | "description" | "date">;
+type Photo = { name: string; width?: number; height?: number; alt: Record<Locale, string> };
 
 interface ServiceSource {
   slug: string;
@@ -51,24 +55,66 @@ const teamPhoto = (n: number) =>
   photo(`equipa-especializada-${n}`, "Equipa especializada da Quinta Casa da Adega", "The specialist team at Quinta Casa da Adega");
 const floralPhoto = (n: number, height?: number) =>
   photo(`design-floral-${n}`, "Design floral na Quinta Casa da Adega", "Floral design at Quinta Casa da Adega", height);
+// The live site has no catering page; its only catering photo is the home-page banner (682×920).
+const cateringPhoto: Photo = {
+  name: "catering-1",
+  width: 682,
+  height: 920,
+  alt: {
+    pt: "Petiscos portugueses servidos no catering da Quinta Casa da Adega",
+    en: "Portuguese appetisers served by the Quinta Casa da Adega catering",
+  },
+};
 
 /** In the live site's order (newest first), which also drives the prev/next links. */
 const sources: ServiceSource[] = [
+  {
+    // New page, not on the live site: placeholder copy, to be reviewed by the venue.
+    slug: "catering",
+    copy: {
+      pt: {
+        title: "Catering",
+        seoTitle: "Catering para Casamentos",
+        serviceType: "Catering para casamentos",
+        metaDescription:
+          "Catering para casamentos na Quinta Casa da Adega, em Mafra: um menu pensado à medida do vosso dia, do cocktail de boas-vindas ao jantar.",
+        description:
+          "Na Quinta Casa da Adega, o catering é pensado à medida de cada casamento. Do cocktail de boas-vindas ao jantar, trabalhamos convosco para definir um menu que reflita o vosso gosto e o estilo da celebração, com o mesmo cuidado e atenção ao detalhe que dedicamos a cada momento do vosso grande dia.",
+        date: "19 de Novembro, 2026",
+      },
+      en: {
+        title: "Catering",
+        seoTitle: "Wedding Catering",
+        serviceType: "Wedding catering",
+        metaDescription:
+          "Wedding catering at Quinta Casa da Adega in Mafra, near Lisbon: a menu tailored to your day, from the welcome cocktail to dinner.",
+        description:
+          "At Quinta Casa da Adega, catering is tailored to each wedding. From the welcome cocktail to dinner, we work with you to create a menu that reflects your taste and the style of your celebration, with the same care and attention to detail we bring to every moment of your big day.",
+        date: "19 November, 2026",
+      },
+    },
+    cover: cateringPhoto,
+    gallery: [cateringPhoto],
+  },
   {
     slug: "decoracao-de-mesas",
     copy: {
       pt: {
         title: "Decoração de Mesas",
+        seoTitle: "Decoração de Mesas para Casamento",
+        serviceType: "Decoração de casamentos",
         metaDescription:
-          "Explore como a nossa decoração transforma cada detalhe, realçando a beleza natural da Quinta Casa da Adega e criando um cenário único, sofisticado e memorável",
+          "Decoração de mesas para casamento que realça a beleza natural da Quinta Casa da Adega, em Mafra — um cenário único, sofisticado e memorável para o vosso dia.",
         description:
           "Explore como a nossa decoração transforma cada detalhe, realçando a beleza natural da Quinta Casa da Adega e criando um cenário único, sofisticado e memorável para o seu grande dia.",
         date: "1 de Junho, 2024",
       },
       en: {
         title: "Table Decoration",
+        seoTitle: "Wedding Table Decoration",
+        serviceType: "Wedding decoration",
         metaDescription:
-          "See how our decoration transforms every detail, enhancing the natural beauty of Quinta Casa da Adega and creating a unique, sophisticated and memorable setting.",
+          "Wedding table decoration that enhances the natural beauty of Quinta Casa da Adega in Mafra, near Lisbon — a unique, sophisticated setting for your day.",
         description:
           "See how our decoration transforms every detail, enhancing the natural beauty of Quinta Casa da Adega and creating a unique, sophisticated and memorable setting for your big day.",
         date: "1 June, 2024",
@@ -82,16 +128,20 @@ const sources: ServiceSource[] = [
     copy: {
       pt: {
         title: "Equipa Especializada",
+        seoTitle: "Equipa Especializada em Casamentos",
+        serviceType: "Coordenação de casamentos",
         metaDescription:
-          "Nossa equipe especializada na Quinta Casa Da Adega está dedicada a tornar seu evento memorável. Com profissionalismo e atenção aos detalhes, cuidamos de cada",
+          "Uma equipa especializada acompanha o vosso casamento na Quinta Casa da Adega, do planeamento à execução, com profissionalismo e atenção a cada detalhe.",
         description:
           "Nossa equipe especializada na Quinta Casa Da Adega está dedicada a tornar seu evento memorável. Com profissionalismo e atenção aos detalhes, cuidamos de cada aspecto para garantir que sua celebração seja perfeita. Estamos aqui para oferecer suporte em todos os momentos, desde o planejamento até a execução, garantindo que cada detalhe contribua para uma experiência única e inesquecível.",
         date: "2 de Novembro, 2021",
       },
       en: {
         title: "Specialist Team",
+        seoTitle: "Specialist Wedding Team",
+        serviceType: "Wedding coordination",
         metaDescription:
-          "Our specialist team at Quinta Casa da Adega is dedicated to making your event memorable. With professionalism and attention to detail, we take care of every aspect.",
+          "A specialist team supports your wedding at Quinta Casa da Adega near Lisbon, from planning to the big day, with professionalism and attention to detail.",
         description:
           "Our specialist team at Quinta Casa da Adega is dedicated to making your event memorable. With professionalism and attention to detail, we take care of every aspect to make sure your celebration is perfect. We are here to support you at every stage, from planning to execution, so that every detail contributes to a unique and unforgettable experience.",
         date: "2 November, 2021",
@@ -120,16 +170,20 @@ const sources: ServiceSource[] = [
     copy: {
       pt: {
         title: "Design Floral",
+        seoTitle: "Design Floral para Casamentos",
+        serviceType: "Design floral para casamentos",
         metaDescription:
-          "Na Quinta Casa Da Adega, o design floral é cuidadosamente criado para complementar cada espaço, desde cerimônias íntimas até grandes recepções. Nossa equipe",
+          "Design floral para casamentos na Quinta Casa da Adega: flores frescas e arranjos pensados para o vosso estilo, de cerimónias intimistas a grandes receções.",
         description:
           "Na Quinta Casa Da Adega, o design floral é cuidadosamente criado para complementar cada espaço, desde cerimônias íntimas até grandes recepções. Nossa equipe de especialistas em design floral trabalha para capturar a essência do seu estilo pessoal, utilizando flores frescas e arranjos artísticos que adicionam um toque de elegância e sofisticação ao seu evento. De bouquets deslumbrantes a arranjos de mesa encantadores, cada detalhe floral é meticulosamente planejado para criar uma atmosfera memorável e cheia de beleza natural.",
         date: "2 de Novembro, 2021",
       },
       en: {
         title: "Floral Design",
+        seoTitle: "Wedding Floral Design",
+        serviceType: "Wedding floral design",
         metaDescription:
-          "At Quinta Casa da Adega, floral design is carefully created to complement every space, from intimate ceremonies to grand receptions.",
+          "Wedding floral design at Quinta Casa da Adega: fresh flowers and arrangements tailored to your style, from intimate ceremonies to grand receptions.",
         description:
           "At Quinta Casa da Adega, floral design is carefully created to complement every space, from intimate ceremonies to grand receptions. Our team of floral design specialists works to capture the essence of your personal style, using fresh flowers and artistic arrangements that add a touch of elegance and sophistication to your event. From stunning bouquets to enchanting table centrepieces, every floral detail is meticulously planned to create a memorable atmosphere full of natural beauty.",
         date: "2 November, 2021",
@@ -142,7 +196,7 @@ const sources: ServiceSource[] = [
 
 const image = (p: Photo, locale: Locale): ServiceImage => ({
   src: `/images/servicos/${p.name}.jpg`,
-  width: 1536,
+  width: p.width ?? 1536,
   height: p.height ?? 1024,
   alt: p.alt[locale],
 });
@@ -194,7 +248,6 @@ export const servicesUi = {
     shareOn: (network: string) => `Partilhar no ${network}`,
     navigation: "Navegação entre serviços",
     previous: "Post anterior",
-    all: "Todos os serviços",
     next: "Próximo post",
     others: "Outros serviços",
   },
@@ -207,34 +260,16 @@ export const servicesUi = {
     shareOn: (network: string) => `Share on ${network}`,
     navigation: "Service navigation",
     previous: "Previous post",
-    all: "All services",
     next: "Next post",
     others: "Other services",
   },
 } satisfies Record<Locale, unknown>;
 
-const listMeta: Record<Locale, { title: string; description: string }> = {
-  pt: {
-    title: "Serviços | Quinta Casa da Adega",
-    description:
-      "Decoração de mesas, design floral e uma equipa especializada para o vosso casamento na Quinta Casa da Adega, em Mafra.",
-  },
-  en: {
-    title: "Services | Quinta Casa da Adega",
-    description:
-      "Table decoration, floral design and a specialist team for your wedding at Quinta Casa da Adega in Mafra.",
-  },
-};
-
-export function servicesMetadata(locale: Locale): Metadata {
-  return localizedMetadata({ locale, paths: routes.services, ...listMeta[locale], image: localized[locale][0].cover });
-}
-
 export function serviceMetadata(locale: Locale, service: Service): Metadata {
   return localizedMetadata({
     locale,
     paths: itemPaths("services", service.slug),
-    title: `${service.title} | Quinta Casa da Adega`,
+    title: `${service.seoTitle} | Quinta Casa da Adega`,
     description: service.metaDescription,
     image: service.cover,
   });

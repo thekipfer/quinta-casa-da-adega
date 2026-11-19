@@ -1,4 +1,4 @@
-import { blogImages, quintaImages, serviceImages } from "@/lib/content";
+import { quintaImages, serviceImages } from "@/lib/content";
 import type { Dictionary } from "@/lib/i18n/types";
 import { itemPaths, routes } from "@/lib/routes";
 
@@ -12,7 +12,7 @@ export const pt: Dictionary = {
   meta: {
     title: "Quinta para Casamento perto de Lisboa | Quinta Casa da Adega",
     description:
-      "Celebrem o vosso casamento exclusivo e elegante na Quinta Casa da Adega, rodeados pela natureza, a poucos minutos de Lisboa. A sua quinta para Casamento perto de Lisboa",
+      "Quinta para casamentos em Mafra, perto de Lisboa, Sintra e Ericeira. Cerimónia ao ar livre, plano B elegante e apenas 15 casamentos por ano — um por dia.",
     ogImageAlt: "Quinta para casamento em Mafra - Quinta Casa da Adega",
   },
 
@@ -20,7 +20,6 @@ export const pt: Dictionary = {
     left: [
       { label: "Início", href: routes.home.pt, current: true },
       { label: "A Nossa Quinta", href: routes.about.pt },
-      { label: "Serviços", href: routes.services.pt },
     ],
     right: [
       { label: "Casamentos", href: routes.weddings.pt },
@@ -29,20 +28,18 @@ export const pt: Dictionary = {
     mobile: [
       { label: "Início", href: routes.home.pt, current: true },
       { label: "A Quinta", href: routes.about.pt },
-      { label: "Serviços", href: routes.services.pt },
       { label: "Casamentos", href: routes.weddings.pt },
       { label: "Contacte-nos", href: routes.quote.pt },
     ],
     footer: [
       { label: "Início", href: routes.home.pt },
       { label: "A Nossa Quinta", href: routes.about.pt },
-      { label: "Serviços", href: routes.services.pt },
       { label: "Casamentos", href: routes.weddings.pt },
       { label: "Contacto", href: routes.quote.pt },
     ],
     legal: [
       { label: "Política de Privacidade", short: "Privacidade", href: "/politica-de-privacidade" },
-      { label: "Política de Cookies", short: "Cookies", href: "/politica-de-cookies/" },
+      { label: "Política de Cookies", short: "Cookies", href: "/politica-de-cookies" },
       { label: "Livro de Reclamações", href: "https://www.livroreclamacoes.pt/Inicio/", external: true },
     ],
   },
@@ -63,6 +60,11 @@ export const pt: Dictionary = {
     headline: "Apenas 15 casamentos por ano",
     lead: "Charmosa, rústica e exclusiva, a Quinta Casa da Adega transforma o vosso dia num momento inesquecível.",
     cta: "Peça a sua proposta",
+    slideAlts: [
+      "Tenda de casamento com mesas postas e candeeiros, junto à casa da Quinta Casa da Adega",
+      "Tenda iluminada à noite com a mesa do jantar de casamento",
+      "Noivos a caminhar junto a uma mesa comprida posta no campo florido da quinta",
+    ],
   },
 
   testimonials: {
@@ -104,10 +106,30 @@ export const pt: Dictionary = {
   services: {
     discover: "Descobrir",
     items: [
-      { title: "A Nossa Quinta", href: routes.about.pt, image: serviceImages.quinta },
-      { title: "Catering", href: routes.services.pt, image: serviceImages.catering },
-      { title: "Floral Design", href: itemPaths("services", "design-floral").pt, image: serviceImages.floral },
-      { title: "Planeamento", href: routes.services.pt, image: serviceImages.planning },
+      {
+        title: "Decoração",
+        href: itemPaths("services", "decoracao-de-mesas").pt,
+        image: serviceImages.quinta,
+        alt: "Mesa de casamento comprida posta no relvado da quinta, com vista para os campos de Mafra",
+      },
+      {
+        title: "Catering",
+        href: itemPaths("services", "catering").pt,
+        image: serviceImages.catering,
+        alt: "Prato de petiscos com azeitonas e enchidos servido num casamento na quinta",
+      },
+      {
+        title: "Floral Design",
+        href: itemPaths("services", "design-floral").pt,
+        image: serviceImages.floral,
+        alt: "Mesa com flores vermelhas e cor de laranja sob uma pérgula com luzes suspensas",
+      },
+      {
+        title: "Planeamento",
+        href: itemPaths("services", "equipa-especializada").pt,
+        image: serviceImages.planning,
+        alt: "Vestido de noiva pendurado numa árvore junto às mesas redondas da receção",
+      },
     ],
   },
 
@@ -118,36 +140,13 @@ export const pt: Dictionary = {
       "Um espaço intimista e sofisticado, a apenas 1 hora de Lisboa, com vista para a Igreja de São Silvestre e um pôr do sol inesquecível.",
     cta: { label: "Saiba mais", href: routes.about.pt },
     leftImage: { ...quintaImages.left, alt: "Quinta Casa da Adega_Quinta para Casamento em Portugal" },
-    rightImage: { ...quintaImages.right, alt: "" },
+    rightImage: { ...quintaImages.right, alt: "Noivos na escadaria de pedra da Quinta Casa da Adega" },
   },
 
-  journal: {
-    titleLines: ["Jornal", "Da Quinta"],
-    readMore: "Read More",
-    posts: [
-      {
-        title: "Tipos de Decoração para casamento",
-        href: "/tipos-de-decoracao-para-casamento/",
-        image: blogImages.decoration,
-        date: "28 de Outubro, 2024",
-        dateHref: "/2024/10/",
-        category: "Inspiração e Estilo de Casamento",
-        categoryHref: "/inspiracao-e-estilo-de-casamento/",
-        excerpt:
-          "Em um ensolarado sábado de primavera, a Quinta Casa da Adega teve a honra de sediar um casamento verdadeiramente encantador....",
-      },
-      {
-        title: "Casamento Rústico com Toque de Elegância",
-        href: "/casamento-rustico-com-toque-de-elegancia/",
-        image: blogImages.rustic,
-        date: "3 de Julho, 2024",
-        dateHref: "/2024/07/",
-        category: "Casamentos Reais na Quinta",
-        categoryHref: "/casamentos-reais/",
-        excerpt:
-          "Em um ensolarado sábado de primavera, a Quinta Casa da Adega teve a honra de sediar um casamento verdadeiramente encantador.",
-      },
-    ],
+  weddingsHome: {
+    titleLines: ["Casamentos", "na Quinta"],
+    viewWedding: "Ver casamento",
+    viewAll: "Ver todos os casamentos",
   },
 
   callToAction: {

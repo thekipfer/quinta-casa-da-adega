@@ -15,9 +15,9 @@ export type ContactPreference = "whatsapp" | "email";
 
 const pt = {
   meta: {
-    title: "Quinta para Casamento em Mafra | Proposta Personalizada",
+    title: "Pedir Orçamento para Casamento em Mafra | Quinta Casa da Adega",
     description:
-      "Descubra a Quinta Casa da Adega — a quinta para casamento em Mafra que une charme rústico, elegância e exclusividade. Solicite a sua proposta personalizada!",
+      "Verifiquem a disponibilidade para o vosso casamento em Mafra, perto de Lisboa. Proposta personalizada em 24–48 horas e visita privada à quinta, sem compromisso.",
   },
   hero: {
     title: "Aqui começa o vosso 'Sim'",
@@ -97,20 +97,12 @@ const pt = {
       phone: "Indiquem um telefone para vos contactarmos por WhatsApp.",
       summary: "Faltam alguns dados — vejam os campos assinalados.",
     },
-    success: {
-      title: "Obrigado!",
-      whatsapp:
-        "Abrimos o WhatsApp com o vosso pedido já preenchido — basta carregar em enviar. Respondemos em 24–48 horas.",
-      email:
-        "O vosso pedido está pronto a enviar — escolham onde o abrir e carreguem em enviar. Respondemos em 24–48 horas.",
-      reopenWhatsapp: "Abrir WhatsApp novamente",
-      reopenEmail: "Abrir na app de email",
-      /** Fallbacks for visitors whose browser has no mail app behind mailto: links. */
-      emailElsewhere: "Ou enviem por",
-      copy: "Copiar mensagem",
-      copied: "Mensagem copiada",
-      copyHint: (email: string) => `Colem-na num email para ${email}.`,
-      again: "Fazer outro pedido",
+    submitting: "A enviar…",
+    /** Shown only if the request can't be sent: the couple can still reach the estate directly. */
+    failure: {
+      text: "Não foi possível enviar o pedido. Tentem novamente ou enviem-no diretamente:",
+      whatsapp: "Enviar pelo WhatsApp",
+      email: "Enviar por email",
     },
     message: {
       intro: "Olá! Gostaríamos de verificar a disponibilidade da Quinta Casa da Adega para o nosso casamento.",
@@ -151,9 +143,9 @@ export type OrcamentoContent = typeof pt;
 
 const en: OrcamentoContent = {
   meta: {
-    title: "Wedding Venue in Mafra | Bespoke Proposal",
+    title: "Wedding Venue Availability & Quote | Quinta Casa da Adega",
     description:
-      "Discover Quinta Casa da Adega — the wedding venue in Mafra that brings together rustic charm, elegance and exclusivity. Request your bespoke proposal!",
+      "Check availability for your wedding at Quinta Casa da Adega, near Lisbon. A bespoke proposal within 24–48 hours and a private visit to the estate, with no obligation.",
   },
   hero: {
     title: "Where your ‘I do’ begins",
@@ -226,18 +218,11 @@ const en: OrcamentoContent = {
       phone: "Enter a phone number so we can contact you on WhatsApp.",
       summary: "Some details are missing — see the highlighted fields.",
     },
-    success: {
-      title: "Thank you!",
-      whatsapp:
-        "We’ve opened WhatsApp with your request already filled in — just tap send. We’ll reply within 24–48 hours.",
-      email: "Your request is ready to send — choose where to open it and hit send. We’ll reply within 24–48 hours.",
-      reopenWhatsapp: "Open WhatsApp again",
-      reopenEmail: "Open in email app",
-      emailElsewhere: "Or send it with",
-      copy: "Copy message",
-      copied: "Message copied",
-      copyHint: (email) => `Paste it into an email to ${email}.`,
-      again: "Make another request",
+    submitting: "Sending…",
+    failure: {
+      text: "We couldn’t send your request. Please try again, or send it to us directly:",
+      whatsapp: "Send via WhatsApp",
+      email: "Send by email",
     },
     message: {
       intro: "Hello! We would like to check Quinta Casa da Adega’s availability for our wedding.",

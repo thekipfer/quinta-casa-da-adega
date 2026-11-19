@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { SiteFooter } from "@/components/SiteFooter";
+import { CookieSettingsButton } from "@/components/consent/CookieSettingsButton";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SplitText } from "@/components/SplitText";
 import { WhatsAppFloat } from "@/components/WhatsAppFloat";
@@ -20,6 +21,7 @@ import { LegalToc } from "@/components/legal/LegalToc";
 import { Reveal } from "@/components/orcamento/Reveal";
 import { Breadcrumbs } from "@/components/weddings/parts";
 import { getDictionary } from "@/lib/i18n";
+import { getConsentCopy } from "@/lib/i18n/consent";
 import {
   COOKIES_HREF,
   PRIVACY_HREF,
@@ -209,6 +211,11 @@ export function CookiePolicyPage() {
               ))}
               <Reveal delay={3} className="border-l-2 border-sand bg-cream px-6 py-5">
                 <p className="font-serif text-[18px] leading-[1.65] text-ink italic">{s.consent.callout}</p>
+              </Reveal>
+              <Reveal delay={4}>
+                <CookieSettingsButton className="qcda-btn qcda-btn--filled hover:bg-brand-deep">
+                  {getConsentCopy("pt").policyButton}
+                </CookieSettingsButton>
               </Reveal>
             </Section>
 
