@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState, useSyncExternalStore, type FormEvent, type ReactNode } from "react";
 import { CalendarHeart, MessageSquareHeart, PenLine, UserRound, UsersRound } from "lucide-react";
-import { CheckIcon, EnvelopeIcon, GuestIcon, WhatsAppLineIcon } from "@/components/orcamento/FormIcons";
+import { WhatsAppIcon } from "@/components/icons";
+import { CheckIcon, EnvelopeIcon, GuestIcon } from "@/components/orcamento/FormIcons";
 import { Reveal } from "@/components/orcamento/Reveal";
 import { whatsappHref } from "@/lib/content";
 import { CONTACT_EMAIL, getOrcamento, type ContactPreference, type GuestRange } from "@/lib/i18n/orcamento";
@@ -339,7 +340,7 @@ export function OrcamentoForm({ locale }: { locale: Locale }) {
               />
               <span className={cn(tile, "group items-center gap-3 px-4 py-3.5")}>
                 {c.value === "whatsapp" ? (
-                  <WhatsAppLineIcon className="size-7 shrink-0 transition-transform duration-500 group-hover:-rotate-6" />
+                  <WhatsAppIcon className="size-7 shrink-0 transition-transform duration-500 group-hover:-rotate-6" />
                 ) : (
                   <EnvelopeIcon className="size-7 shrink-0 transition-transform duration-500 group-hover:-rotate-6" />
                 )}

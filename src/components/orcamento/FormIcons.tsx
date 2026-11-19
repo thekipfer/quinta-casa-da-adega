@@ -62,16 +62,6 @@ export function EnvelopeIcon(props: IconProps) {
   );
 }
 
-/** Thin-line WhatsApp mark (speech bubble + handset) to sit alongside the envelope. */
-export function WhatsAppLineIcon(props: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
-      <path d="M4.2 19.8 5.3 16A8.5 8.5 0 1 1 8.4 19z" />
-      <path d="M9.3 8.4c.2-.5.6-.5.9-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2.1.4 0 .6l-.5.7c-.1.2-.1.4 0 .6.6 1 1.4 1.8 2.4 2.4.2.1.4.1.6 0l.7-.5c.2-.1.4-.1.6 0l1.6.7c.4.2.5.4.5.6v.5c0 .3 0 .7-.5.9-.7.4-1.6.5-2.4.2a9.6 9.6 0 0 1-5-5c-.3-.8-.2-1.7.3-2.3Z" />
-    </svg>
-  );
-}
-
 /** Small check used on selected option tiles. */
 export function CheckIcon(props: IconProps) {
   return (
