@@ -8,6 +8,7 @@ import { Reveal } from "@/components/orcamento/Reveal";
 import { whatsappHref } from "@/lib/content";
 import { CONTACT_EMAIL, getOrcamento, type ContactPreference, type GuestRange } from "@/lib/i18n/orcamento";
 import type { Locale } from "@/lib/i18n/types";
+import { trackLead } from "@/lib/meta-events";
 import { submitProposalRequest } from "@/lib/proposal-request";
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
@@ -183,8 +184,11 @@ export function OrcamentoForm({ locale }: { locale: Locale }) {
       contact,
       company: honeypot?.value ?? "",
     });
-    if (ok) router.push(routes.thankYou[locale]);
-    else setStatus("failed");
+    if (ok) {
+      // Meta Pixel Lead only once the server accepted the request (consent-gated in tracking.ts).
+      trackLead("proposal_form");
+      router.push(routes.thankYou[locale]);
+    } else setStatus("failed");
   };
 
   return (

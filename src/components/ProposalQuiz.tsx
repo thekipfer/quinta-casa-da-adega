@@ -7,6 +7,7 @@ import { X } from "lucide-react";
 import { QuizCalendar, formatLongDate } from "@/components/QuizCalendar";
 import { whatsappHref } from "@/lib/content";
 import { getDictionary, type Dictionary, type Locale } from "@/lib/i18n";
+import { trackLead } from "@/lib/meta-events";
 import { sendProposalRequest } from "@/lib/proposal-request";
 import { cn } from "@/lib/utils";
 import type { QuizChoiceStep } from "@/types/content";
@@ -218,6 +219,8 @@ export function ProposalQuiz({ locale, open, onClose }: ProposalQuizProps) {
       services: answers.services,
       company: honeypot?.value ?? "",
     });
+    // Meta Pixel Lead (consent-gated in tracking.ts); skipped when the honeypot was filled by a bot.
+    if (!honeypot?.value) trackLead("quiz_whatsapp");
     window.open(buildWhatsAppUrl(answers, dict), "_blank", "noopener,noreferrer");
     setSubmitted(true);
   };

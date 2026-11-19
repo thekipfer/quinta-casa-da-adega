@@ -126,7 +126,40 @@ function applyGoogle(r: ConsentRecord) {
 
 /* ---------- Meta Pixel ---------- */
 
-const metaState = { loaded: false };
+export type MetaEvent = {
+  name: string;
+  params?: Record<string, unknown>;
+  /** Unique id per event, so a future Conversions API (server) event can be deduplicated against it. */
+  eventID?: string;
+  /** trackCustom instead of a standard event. */
+  custom?: boolean;
+};
+
+/** granted: Marketing consent is on. denied: the visitor refused or withdrew it. */
+const metaState = { loaded: false, granted: false, denied: false };
+/**
+ * Events fired before the visitor has decided (e.g. a page's ViewContent on first load, which runs
+ * before the consent effect). Sent once Marketing is granted, dropped if it is refused. Capped.
+ */
+let metaQueue: MetaEvent[] = [];
+
+function sendMeta(e: MetaEvent) {
+  const fbq = w().fbq;
+  if (!fbq) return;
+  const method = e.custom ? "trackCustom" : "track";
+  if (e.eventID) fbq(method, e.name, e.params ?? {}, { eventID: e.eventID });
+  else fbq(method, e.name, e.params ?? {});
+}
+
+/**
+ * Track a Meta Pixel event. Never sends anything without Marketing consent: before a decision it is
+ * queued, after a refusal it is dropped, and with no Pixel ID configured it is a no-op.
+ */
+export function trackMetaEvent(e: MetaEvent) {
+  if (!trackingConfig.metaPixelId || metaState.denied) return;
+  if (metaState.loaded && metaState.granted) sendMeta(e);
+  else if (metaQueue.length < 20) metaQueue.push(e);
+}
 
 function installFbq() {
   const win = w();
@@ -157,8 +190,17 @@ function applyMeta(r: ConsentRecord) {
     } else {
       w().fbq?.("consent", "grant");
     }
+    metaState.granted = true;
+    metaState.denied = false;
+    // Events from before the decision (this page's ViewContent, a click while the banner was open…).
+    const queued = metaQueue;
+    metaQueue = [];
+    queued.forEach(sendMeta);
   } else {
     if (metaState.loaded) w().fbq?.("consent", "revoke");
+    metaState.granted = false;
+    metaState.denied = true;
+    metaQueue = [];
     deleteCookies(/^_fbp$|^_fbc$/);
   }
 }
@@ -171,5 +213,5 @@ export function applyConsentToTags(r: ConsentRecord) {
 
 /** Client-side navigations: GA4 counts them itself (history events); the Pixel needs a PageView. */
 export function trackPageView() {
-  if (metaState.loaded) w().fbq?.("track", "PageView");
+  if (metaState.loaded && metaState.granted) w().fbq?.("track", "PageView");
 }
