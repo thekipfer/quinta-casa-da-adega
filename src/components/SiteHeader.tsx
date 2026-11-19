@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { FacebookIcon, InstagramIcon, MenuOpenIcon, WhatsAppIcon } from "@/components/icons";
-import { useScrollY } from "@/hooks/use-appear";
+import { useRevealOnScrollUp } from "@/hooks/use-appear";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { PHONE_DISPLAY, WHATSAPP_SHORT_HREF, socialLinks } from "@/lib/content";
 import { getDictionary, type Locale } from "@/lib/i18n";
@@ -19,6 +19,7 @@ const socialIcon: Record<SocialLink["icon"], typeof InstagramIcon> = {
 };
 
 const HEADER_HEIGHT = 130;
+const MOBILE_HEADER_HEIGHT = 80;
 
 type HeaderProps = {
   locale: Locale;
@@ -103,11 +104,51 @@ function HeaderRow({ compact, locale, current, alternates }: HeaderProps & { com
   );
 }
 
+function MobileBar({ locale, onOpenMenu, priority }: { locale: Locale; onOpenMenu: () => void; priority?: boolean }) {
+  const t = getDictionary(locale);
+  return (
+    <div className="flex h-full items-center justify-between px-6">
+      <Link href={t.homeHref} aria-label="Quinta Casa da Adega" className="pl-[5px]">
+        <Image
+          src="/images/logo-quinta.png"
+          alt="Quinta Casa da Adega"
+          width={85}
+          height={60}
+          priority={priority}
+          className="h-[60px] w-[85px]"
+        />
+      </Link>
+      {/* Language switcher lives only in the fullscreen menu on mobile/tablet */}
+      <div className="flex items-center">
+        <a
+          href={WHATSAPP_SHORT_HREF}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="WhatsApp"
+          className="mx-[10px] flex size-[35px] items-center justify-center rounded-full border border-brand bg-white text-brand"
+        >
+          <WhatsAppIcon className="size-5" />
+        </a>
+        <button
+          type="button"
+          onClick={onOpenMenu}
+          aria-label={t.header.openMenu}
+          className="ml-5 flex h-[35px] items-center text-ink"
+        >
+          <MenuOpenIcon />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export function SiteHeader({ locale, current, alternates }: HeaderProps) {
   const t = getDictionary(locale);
-  const scrollY = useScrollY();
   const [menuOpen, setMenuOpen] = useState(false);
-  const stickyVisible = scrollY >= HEADER_HEIGHT;
+  // Sticky bars appear only while scrolling back up (and hide again when scrolling down).
+  const stickyVisible = useRevealOnScrollUp(HEADER_HEIGHT);
+  const mobileStickyVisible = useRevealOnScrollUp(MOBILE_HEADER_HEIGHT);
+  const openMenu = () => setMenuOpen(true);
 
   useEffect(() => {
     document.documentElement.style.overflow = menuOpen ? "hidden" : "";
@@ -140,11 +181,11 @@ export function SiteHeader({ locale, current, alternates }: HeaderProps) {
         <span className="absolute right-6 bottom-0 left-6 h-px bg-brand" aria-hidden="true" />
       </header>
 
-      {/* Desktop sticky header — slides down once scrolled past the header height */}
+      {/* Desktop sticky header — slides down when scrolling back up past the header height */}
       <div
         className={cn(
-          "fixed top-0 left-0 z-[100] hidden h-[80px] w-full bg-white shadow-[0_3px_6px_0_rgba(0,0,0,0.1)] transition-transform duration-500 desk:block",
-          stickyVisible ? "translate-y-0" : "-translate-y-full",
+          "fixed top-0 left-0 z-[100] hidden h-[80px] w-full bg-white shadow-[0_3px_6px_0_rgba(0,0,0,0.1)] transition-[transform,visibility] duration-500 desk:block",
+          stickyVisible ? "visible translate-y-0" : "invisible -translate-y-full",
         )}
         aria-hidden={!stickyVisible}
       >
@@ -153,32 +194,19 @@ export function SiteHeader({ locale, current, alternates }: HeaderProps) {
 
       {/* Mobile / tablet header */}
       <header className="relative z-[100] h-[80px] bg-white desk:hidden">
-        <div className="flex h-full items-center justify-between px-6">
-          <Link href={t.homeHref} aria-label="Quinta Casa da Adega" className="pl-[5px]">
-            <Image src="/images/logo-quinta.png" alt="Quinta Casa da Adega" width={85} height={60} priority className="h-[60px] w-[85px]" />
-          </Link>
-          {/* Language switcher lives only in the fullscreen menu on mobile/tablet */}
-          <div className="flex items-center">
-            <a
-              href={WHATSAPP_SHORT_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="WhatsApp"
-              className="mx-[10px] flex size-[35px] items-center justify-center rounded-full border border-brand bg-white text-brand"
-            >
-              <WhatsAppIcon className="size-5" />
-            </a>
-            <button
-              type="button"
-              onClick={() => setMenuOpen(true)}
-              aria-label={t.header.openMenu}
-              className="ml-5 flex h-[35px] items-center text-ink"
-            >
-              <MenuOpenIcon />
-            </button>
-          </div>
-        </div>
+        <MobileBar locale={locale} onOpenMenu={openMenu} priority />
       </header>
+
+      {/* Mobile / tablet sticky header — slides down when scrolling back up */}
+      <div
+        className={cn(
+          "fixed top-0 left-0 z-[100] h-[80px] w-full bg-white shadow-[0_3px_6px_0_rgba(0,0,0,0.1)] transition-[transform,visibility] duration-500 desk:hidden",
+          mobileStickyVisible ? "visible translate-y-0" : "invisible -translate-y-full",
+        )}
+        aria-hidden={!mobileStickyVisible}
+      >
+        <MobileBar locale={locale} onOpenMenu={openMenu} />
+      </div>
 
       {/* Fullscreen mobile menu */}
       <div

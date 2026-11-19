@@ -1,6 +1,6 @@
 "use client";
 
-import { HeartOutlineIcon, WhatsAppIcon } from "@/components/icons";
+import { WhatsAppIcon } from "@/components/icons";
 import { useScrollY } from "@/hooks/use-appear";
 import { whatsappHref } from "@/lib/content";
 import { getDictionary, type Locale } from "@/lib/i18n";
@@ -10,7 +10,8 @@ const SHOW_AFTER = 540;
 
 /**
  * Fixed WhatsApp button (replaced the "TOP" button) that opens a chat with Samyra.
- * Same heart outline that draws itself on hover; a "talk to Samyra" label slides out on hover.
+ * White circle with the brand-brown WhatsApp mark; a "talk to Samyra" label slides out on hover (desktop).
+ * Sits tucked into the bottom-right corner on mobile.
  */
 export function WhatsAppFloat({ locale }: { locale: Locale }) {
   const t = getDictionary(locale).whatsapp;
@@ -23,8 +24,8 @@ export function WhatsAppFloat({ locale }: { locale: Locale }) {
       rel="noopener noreferrer"
       aria-label={t.floatAria}
       className={cn(
-        "qcda-btt group fixed right-[50px] bottom-[75px] z-[1000] flex h-[55.22px] w-[59.5px] items-center justify-center text-white drop-shadow-[0_1px_4px_rgba(24,14,1,0.45)]",
-        visible ? "visible opacity-100 transition-opacity duration-300" : "invisible opacity-0 transition-[opacity,visibility] duration-150",
+        "group fixed right-4 bottom-[max(16px,env(safe-area-inset-bottom))] z-[1000] flex size-[54px] items-center justify-center rounded-full bg-white text-brand shadow-[0_2px_10px_rgba(24,14,1,0.25)] transition-[opacity,visibility,transform] duration-300 hover:scale-105 desk:right-[50px] desk:bottom-[75px] desk:size-[58px]",
+        visible ? "visible opacity-100" : "invisible opacity-0",
       )}
     >
       <span
@@ -33,8 +34,7 @@ export function WhatsAppFloat({ locale }: { locale: Locale }) {
       >
         {t.floatLabel}
       </span>
-      <HeartOutlineIcon className="absolute inset-0 h-auto w-[59px]" />
-      <WhatsAppIcon className="relative -mt-[6px] size-[22px]" />
+      <WhatsAppIcon className="size-[26px]" />
     </a>
   );
 }

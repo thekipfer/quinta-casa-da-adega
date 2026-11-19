@@ -388,16 +388,6 @@
   }
 }
 
-/* Back-to-top heart stroke draw */
-.qcda-btt svg path {
-  stroke-dasharray: 181;
-  stroke-dashoffset: 181;
-  transition: stroke-dashoffset 1.2s;
-}
-.qcda-btt:hover svg path {
-  stroke-dashoffset: 0;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .qcda-split .qcda-char {
     transition: none;
